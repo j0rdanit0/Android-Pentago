@@ -417,6 +417,7 @@ public class GameFragment extends Fragment {
     private void startNewGame() {   	
     	
     	mGame.newGame();  
+    	mPlacePiece = true;
     	for (int i = 0; i < mImages.length; i++)
 		{
 			Bitmap b = BitmapFactory.decodeResource(getResources(), 
@@ -449,12 +450,12 @@ public class GameFragment extends Fragment {
     		mTurn = PentagoGame.PLAYER_2;
     	
     	// Start the game
-    	if (mTurn == PentagoGame.PLAYER_2) {
+    	//if (mTurn == PentagoGame.PLAYER_2) {
     		//updateInfoText(R.string.first_computer);
-    		int move = mGame.getComputerMove();
-    		setMove(PentagoGame.PLAYER_2, move);
-    	}
-    	else
+    		//int move = mGame.getComputerMove();
+    		//setMove(PentagoGame.PLAYER_2, move);
+    	//}
+    	//else
     		//updateInfoText(R.string.first_human);    	
     	
     	mGameOver = false;
@@ -534,7 +535,7 @@ public class GameFragment extends Fragment {
     	}
     	else if (winner == 1) {
     		mHumanWins++;
-    		Toast.makeText(getActivity(), "Player 1 won!", Toast.LENGTH_LONG).show();
+    		Toast.makeText(getActivity(), mPlayer1Name + " won!", Toast.LENGTH_LONG).show();
     		//mHumanScoreTextView.setText(Integer.toString(mHumanWins));
     		//String defaultMessage = getResources().getString(R.string.result_human_wins);
     		//updateInfoText(mPrefs.getString(Settings.VICTORY_MESSAGE_PREFERENCE_KEY, 
@@ -543,7 +544,7 @@ public class GameFragment extends Fragment {
     	}
     	else if (winner == 2) {
     		mComputerWins++;
-    		Toast.makeText(getActivity(), "Player 2 won!", Toast.LENGTH_LONG).show();
+    		Toast.makeText(getActivity(), mPlayer2Name + " won!", Toast.LENGTH_LONG).show();
     		//mComputerScoreTextView.setText(Integer.toString(mComputerWins));
     		//updateInfoText(R.string.result_computer_wins);
     		mAudioPlayer.play(getActivity(), R.raw.lose);
