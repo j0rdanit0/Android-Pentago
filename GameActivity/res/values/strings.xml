@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+    
     <string name="app_name">Pentago</string>
     
     <string name="game_settings">Settings</string>
@@ -56,4 +56,37 @@
     <string name="sfx_volume">SFX Volume</string>
     <string name="animations">Animations</string>
 
+    <string name="rules">
+        	\t The game starts with an 
+       	\n empty game board. The game board 
+       	\n consists of the four separate 
+       	\n boards. The starting player 
+       	\n places a marble in a socket  
+       	\n if his or her choice. After 
+       	\n placing a marble the player turns
+        \n any one of the four boards one 
+        \n notch (90 degrees) clock - or 
+        \n counter clockwise. A board, not 
+        \n necessarily the one on whitch the 
+        \n marble been placed, must be 
+        \n turned each move.
+		\n \n
+			\t Then the second player does 
+		\n the same, i.e. places a marble 
+		\n and turns a board. So on and 
+		\n so forth.
+		\n \n
+			\t The first player to get five 
+		\n marbles in a row wins! The row can 
+		\n be horizontal, vertical or diagonal 
+		\n and run over two or three boards. 
+		\n If a player gets five in a row when 
+		\n placing a marble he or she does not 
+		\n need to turn a board. If all the 
+		\n sockets have been filled without 
+		\n any player getting five in a row the 
+		\n game is draw. If both players get the 
+		\n five in a row as a player turns a board 
+		\n the game is also a draw.
+    </string>
 </resources>

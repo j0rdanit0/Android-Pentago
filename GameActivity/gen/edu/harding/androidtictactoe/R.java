@@ -85,7 +85,8 @@ public final class R {
         public static final int activity_settings=0x7f030002;
         public static final int ai_dialog=0x7f030003;
         public static final int fragment_game=0x7f030004;
-        public static final int pvp_dialog=0x7f030005;
+        public static final int help_dialog=0x7f030005;
+        public static final int pvp_dialog=0x7f030006;
     }
     public static final class menu {
         public static final int game_options=0x7f0a0000;
@@ -131,6 +132,7 @@ public final class R {
         public static final int result_computer_wins=0x7f08000c;
         public static final int result_human_wins=0x7f08000b;
         public static final int result_tie=0x7f08000a;
+        public static final int rules=0x7f08002a;
         public static final int save_button=0x7f08001c;
         public static final int score_label_computer=0x7f080004;
         public static final int score_label_human=0x7f080003;

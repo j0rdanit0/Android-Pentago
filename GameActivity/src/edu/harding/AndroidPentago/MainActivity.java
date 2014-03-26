@@ -1,18 +1,22 @@
 package edu.harding.AndroidPentago;
 
-import edu.harding.androidtictactoe.R;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
+import edu.harding.androidtictactoe.R;
 
 public class MainActivity extends Activity {
 	private SensorManager mSensorManager;
@@ -75,8 +79,28 @@ public class MainActivity extends Activity {
 			}
 		});
 
+		//LayoutInflater inflater = new LayoutInflater(MainActivity.this);
 		mHelp = (Button)findViewById(R.id.help_button);
-		mHelp.setEnabled(false);
+		mHelp.setOnClickListener(new View.OnClickListener() 
+		{
+
+			@Override
+			public void onClick(View v) 
+			{
+				AlertDialog.Builder helpDialog = new AlertDialog.Builder(MainActivity.this);
+				helpDialog.setView(getLayoutInflater().inflate(R.layout.help_dialog, null))
+					.setPositiveButton(R.string.ok_button, 
+							new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						
+					}
+				}).create();
+				
+				helpDialog.show();
+			}
+		});
 
 		mRecords = (Button)findViewById(R.id.records_button);
 		mRecords.setEnabled(false);
