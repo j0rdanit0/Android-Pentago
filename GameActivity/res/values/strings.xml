@@ -29,6 +29,7 @@
     <string name="goes_first_computer">Android</string>
     <string name="goes_first_alternate">Alternate</string>
     
+    <string name="name">Name:</string>
     <string name="player1_name_label">Player 1 Name:</string>
 	<string name="player2_name_label">Player 2 Name:</string>
 	<string name="name_dialog_title">Input Player Names</string>
@@ -36,6 +37,12 @@
 	<string name="ok_button">OK</string>
 	<string name="cancel_button">Cancel</string>
 	<string name="name_default">Player</string>
+	<string name="save_button">Save</string>
+	
+	<string name="edit_player">Edit Player</string>
+	
+	<string name="PvP">2 Player</string>
+	<string name="AI">AI</string>
 	
     <string name="hello_world">Hello world!</string>
     <string name="newGame">New Game</string>
@@ -43,5 +50,10 @@
     <string name="help">Help</string>
     <string name="records">Records</string>
     <string name="welcome">PENTAGO</string>
+    
+    <string name="master_volume">Master Volume</string>
+    <string name="music_volume">Music Volume</string>
+    <string name="sfx_volume">SFX Volume</string>
+    <string name="animations">Animations</string>
 
 </resources>

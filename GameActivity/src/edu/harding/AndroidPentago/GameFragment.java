@@ -1,6 +1,8 @@
 package edu.harding.AndroidPentago;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -19,8 +21,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.Chronometer;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -61,6 +63,9 @@ public class GameFragment extends Fragment {
 	
 	private Chronometer mChronometer;
 	
+	private AlertDialog.Builder pvpNamesDialog;
+	private AlertDialog.Builder aiNamesDialog;
+	
 	private TextView mInfoTextView; 
 	private TextView mHumanScoreTextView;
 	private TextView mComputerScoreTextView;
@@ -78,10 +83,12 @@ public class GameFragment extends Fragment {
 	private ImageView mImages[] = new ImageView[36];
 	
 	private String mInfoText;
+	private String mPlayer1Name;
+	private String mPlayer2Name;
 	
 	private char[] mBoard;
 	
-	private boolean mPvP = false;
+	private boolean mPvP = true;
 		
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -113,6 +120,111 @@ public class GameFragment extends Fragment {
 		// Clear prefs for testing
 		//mPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity()); 
 		//mPrefs.edit().clear().commit();
+		
+		final View pvpNamesView = inflater.inflate(R.layout.pvp_dialog, null);
+		final View aiNameView = inflater.inflate(R.layout.ai_dialog, null);
+		
+		pvpNamesDialog = new AlertDialog.Builder(getActivity());
+		pvpNamesDialog.setView(pvpNamesView)
+			.setPositiveButton(R.string.ok_button, 
+					new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				EditText player1Name = (EditText) pvpNamesView.findViewById(R.id.player1Name); 
+				EditText player2Name = (EditText) pvpNamesView.findViewById(R.id.player2Name);
+				
+				mPlayer1Name = player1Name.getText().toString();
+				mPlayer2Name = player2Name.getText().toString();
+				
+				if(mPlayer1Name.trim().equals("")) {
+					mPlayer1Name = "Player 1";
+				}
+				
+				if(mPlayer2Name.trim().equals("")) {
+					mPlayer2Name = "Player 2";
+				}
+			}
+		}).setNegativeButton(R.string.cancel_button, 
+				new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				Intent i = new Intent(getActivity(), MainActivity.class);
+				startActivity(i);
+				
+			}
+		}).create();
+		
+		aiNamesDialog = new AlertDialog.Builder(getActivity());
+		aiNamesDialog.setView(inflater.inflate(R.layout.ai_dialog, null))
+			.setPositiveButton(R.string.ok_button, 
+					new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				EditText playerName = (EditText) aiNameView.findViewById(R.id.playerName); 
+				
+				mPlayer1Name = playerName.getText().toString();
+				mPlayer2Name = "Android";
+				
+				if(mPlayer1Name.trim().equals("")) {
+					mPlayer1Name = "Player 1";
+				}
+				
+				if(mPlayer2Name.trim().equals("")) {
+					mPlayer2Name = "Player 2";
+				}
+				
+			}
+		}).setNegativeButton(R.string.cancel_button, 
+				new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				Intent i = new Intent(getActivity(), MainActivity.class);
+				startActivity(i);
+				
+			}
+		}).create();
+
+	
+		
+		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		builder.setSingleChoiceItems(new CharSequence[] {"PvP", "AI"} , 0, 
+				new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				if(which == 0) {
+					mPvP = true;
+				} else {
+					mPvP = false;
+				}
+				
+			}
+		}).setPositiveButton(R.string.ok_button, 
+					new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+					if(mPvP) {
+						pvpNamesDialog.show();
+					} else {
+						aiNamesDialog.show();
+					}
+			}
+		}).setNegativeButton(R.string.cancel_button, 
+				new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				// TODO Auto-generated method stub
+				
+			}
+		}).create();
+		
+		builder.show();
 		
 		Log.d(LOGTAG, "onCreateView");
 		

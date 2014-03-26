@@ -64,7 +64,16 @@ public class MainActivity extends Activity {
 		});
 
 		mSettings = (Button)findViewById(R.id.settings_button);
-		mSettings.setEnabled(false);
+		mSettings.setOnClickListener(new View.OnClickListener() 
+		{
+
+			@Override
+			public void onClick(View v) 
+			{
+				Intent i = new Intent(MainActivity.this, SettingsActivity.class);
+				startActivity(i);
+			}
+		});
 
 		mHelp = (Button)findViewById(R.id.help_button);
 		mHelp.setEnabled(false);
