@@ -532,7 +532,7 @@ public class GameFragment extends Fragment {
     		Toast.makeText(getActivity(), "It's a tie!", Toast.LENGTH_LONG).show();
     		//mTieScoreTextView.setText(Integer.toString(mTies));
     		//updateInfoText(R.string.result_tie); 
-    	}
+    	} 
     	else if (winner == 1) {
     		mHumanWins++;
     		Toast.makeText(getActivity(), mPlayer1Name + " won!", Toast.LENGTH_LONG).show();

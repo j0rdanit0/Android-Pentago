@@ -159,7 +159,7 @@ public class PentagoDatabaseHelper extends SQLiteOpenHelper {
 		Cursor c = db.query("player_record", null, "player1 = '" + player1  + "'" + " AND player2 = '" + player2 + "'", null, null, null, null, null);
 		if (c.moveToFirst()) {
 			db.execSQL(sql);
-		}else {
+		}else { 
 			ContentValues values = new ContentValues();
 			values.put("player1", player1);
 			values.put("player2", player2);

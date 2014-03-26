@@ -34,7 +34,7 @@ public class PentagoGame {
 	
 	public static final int BOARD_SIZE = 36;
 	
-	public static final int MAX_MOVES = 36;
+	public static final int MAX_MOVES = 36; 
 	
 	// Characters used to represent the human, computer, and open spots
 	public static final char PLAYER_1 = '1';
