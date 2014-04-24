@@ -12,6 +12,7 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -21,13 +22,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.Chronometer;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.GridLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import edu.harding.androidtictactoe.R;
@@ -253,13 +251,17 @@ public class GameFragment extends Fragment {
 				topLeft, topCenter, topRight, midLeft, midCenter, midRight, 
 				botLeft, botCenter, botRight};
 		
+		DisplayMetrics dm = new DisplayMetrics();
+		getActivity().getWindowManager().getDefaultDisplay().getMetrics(dm);
+		int width = dm.widthPixels / 9;
+		int height = width;
+		
 		for (int i = 0; i < mImages.length; i++)
 		{
-			
 			mImages[i] = new ImageView(getActivity());
 			mImages[i].setImageResource(R.drawable.blank);
 			FrameLayout.LayoutParams params = new FrameLayout.LayoutParams
-					(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+					(width, height);
 			params.gravity = imageGravity[i];
 			
 			mImages[i].setLayoutParams(params);
