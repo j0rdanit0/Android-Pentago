@@ -12,7 +12,7 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,8 +21,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.Chronometer;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -30,12 +33,8 @@ import android.widget.Toast;
 import edu.harding.androidtictactoe.R;
 
 public class GameFragment extends Fragment {
-
-	private final String LOGTAG = "TTT";
 	
-	// Represents the game board
-	
-	private LinearLayout[] mRows = new LinearLayout[6];
+	private FrameLayout[] mBoardImages = new FrameLayout[6];
 	
 	private int[] mViewIds = new int[4];
 	
@@ -93,8 +92,6 @@ public class GameFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-		Log.d(LOGTAG, "onCreate - GameFragment");
 		
 		// Cause onCreateOptionsMenu to trigger
 		setHasOptionsMenu(true);
@@ -226,32 +223,56 @@ public class GameFragment extends Fragment {
 		
 		builder.show();
 		
-		Log.d(LOGTAG, "onCreateView");
-		
 		if (mGame == null) {
-			Log.d(LOGTAG, "NEW mGame");
 			mGame = new PentagoGame();
 		}
-
-		mRows[0] = (LinearLayout)v.findViewById(R.id.row1);
-		mRows[1] = (LinearLayout)v.findViewById(R.id.row2);
-		mRows[2] = (LinearLayout)v.findViewById(R.id.row3);
-		mRows[3] = (LinearLayout)v.findViewById(R.id.row4);
-		mRows[4] = (LinearLayout)v.findViewById(R.id.row5);
-		mRows[5] = (LinearLayout)v.findViewById(R.id.row6);
+		
+		mBoardImages[0] = (FrameLayout) v.findViewById(R.id.quadrant1);
+		mBoardImages[1] = (FrameLayout) v.findViewById(R.id.quadrant2);
+		mBoardImages[2] = (FrameLayout) v.findViewById(R.id.quadrant3);
+		mBoardImages[3] = (FrameLayout) v.findViewById(R.id.quadrant4);
+	
+		int topLeft = Gravity.TOP | Gravity.LEFT;
+		int topCenter = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
+		int topRight = Gravity.TOP | Gravity.RIGHT;
+		
+		int midLeft = Gravity.CENTER_VERTICAL | Gravity.LEFT;
+		int midCenter = Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL;
+		int midRight = Gravity.CENTER_VERTICAL | Gravity.RIGHT;
+		
+		int botLeft = Gravity.BOTTOM | Gravity.LEFT;
+		int botCenter = Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL;
+		int botRight = Gravity.BOTTOM | Gravity.RIGHT;
+		
+		int[] imageGravity = {topLeft, topCenter, topRight, 
+				midLeft, midCenter, midRight, botLeft, botCenter, botRight, 
+				topLeft, topCenter, topRight, midLeft, midCenter, midRight, 
+				botLeft, botCenter, botRight,
+				topLeft, topCenter, topRight, midLeft, midCenter, midRight, 
+				botLeft, botCenter, botRight,
+				topLeft, topCenter, topRight, midLeft, midCenter, midRight, 
+				botLeft, botCenter, botRight};
 		
 		for (int i = 0; i < mImages.length; i++)
 		{
+			
 			mImages[i] = new ImageView(getActivity());
-			Bitmap b = BitmapFactory.decodeResource(getResources(), 
-		               R.drawable.blank);
-			mImages[i].setImageBitmap(b);
-			mImages[i].setLayoutParams(new LinearLayout.LayoutParams(120,
-					120));
+			mImages[i].setImageResource(R.drawable.blank);
+			FrameLayout.LayoutParams params = new FrameLayout.LayoutParams
+					(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+			params.gravity = imageGravity[i];
+			
+			mImages[i].setLayoutParams(params);
 			mImages[i].setOnTouchListener(mTouchListener);
 			mImages[i].setId(i);
-			mRows[i/6].addView(mImages[i]);
 		}
+		
+		for(int j = 0; j < mImages.length; j++) {
+			int index = j / 9;
+			mBoardImages[index].addView(mImages[j]);
+			mBoardImages[index].bringChildToFront(mImages[j]);
+		}
+		
 		updateImages();
 		
 		mClockwiseImage = (ImageView)v.findViewById(R.id.clockwise);
@@ -271,7 +292,6 @@ public class GameFragment extends Fragment {
     	
         
         if (savedInstanceState == null) {   
-        	Log.d(LOGTAG, "NO savedInstanceState");
         	startNewGame();
         }
         else {        	
@@ -319,7 +339,6 @@ public class GameFragment extends Fragment {
 	@Override
 	public void onSaveInstanceState(Bundle outState) {		
 		super.onSaveInstanceState(outState);		
-		Log.d(LOGTAG, "onSaveInstanceState");
 		outState.putCharArray("board", mGame.getBoardState());		
 		outState.putBoolean("mGameOver", mGameOver);	
 		outState.putCharSequence("info", mInfoTextView.getText());
@@ -376,9 +395,6 @@ public class GameFragment extends Fragment {
     	else
     		mGame.setDifficultyLevel(PentagoGame.DifficultyLevel.Expert); 
     	
-    	//Toast.makeText(this.getActivity(), "Difficulty: " + difficultyLevel, Toast.LENGTH_LONG).show();
-    	Log.d(LOGTAG, "Difficulty: " + difficultyLevel);
-    	
     	String goes_first = mPrefs.getString(Settings.GOES_FIRST_PREFERENCE_KEY,
     			getResources().getString(R.string.goes_first_alternate));
     	if (!goes_first.equals(getResources().getString(R.string.goes_first_alternate))) {
@@ -420,18 +436,13 @@ public class GameFragment extends Fragment {
     	mPlacePiece = true;
     	for (int i = 0; i < mImages.length; i++)
 		{
-			Bitmap b = BitmapFactory.decodeResource(getResources(), 
-		               R.drawable.blank);
-			mImages[i].setImageBitmap(b);
+			mImages[i].setImageResource(R.drawable.blank);
 		}
-    	Log.d(LOGTAG, "Game Created");
     	//mBoardView1.invalidate(); mBoardView2.invalidate(); mBoardView3.invalidate(); mBoardView4.invalidate();   // Redraw the board    	
 
     	// Determine who should go first based on settings
     	String goesFirst = mPrefs.getString(Settings.GOES_FIRST_PREFERENCE_KEY, 
     			getResources().getString(R.string.goes_first_alternate));
-    	
-    	Log.d(LOGTAG, "I'm not dead yet!");
     	
     	if (goesFirst.equals(getResources().getString(R.string.goes_first_alternate))) {
     		// Alternate who goes first
@@ -560,21 +571,15 @@ public class GameFragment extends Fragment {
     	{
     		if(mBoard[i] == mGame.PLAYER_1)
     		{
-    			Bitmap b = BitmapFactory.decodeResource(getResources(), 
-    					R.drawable.white_piece);
-    			mImages[i].setImageBitmap(b);
+    			mImages[i].setImageResource(R.drawable.white_piece);
     		}
     		else if (mBoard[i] == mGame.PLAYER_2)
     		{
-    			Bitmap b = BitmapFactory.decodeResource(getResources(), 
-    					R.drawable.black_piece);
-    			mImages[i].setImageBitmap(b);
+    			mImages[i].setImageResource(R.drawable.black_piece);
     		}
     		else
     		{
-    			Bitmap b = BitmapFactory.decodeResource(getResources(), 
-    					R.drawable.blank);
-    			mImages[i].setImageBitmap(b);
+    			mImages[i].setImageResource(R.drawable.blank);
     		}
     	}
     }
@@ -658,17 +663,13 @@ public class GameFragment extends Fragment {
 			    				mClockwiseImage.setVisibility(View.VISIBLE);
 			    				mCounterClockwiseImage.setVisibility(View.VISIBLE);
 			    				
-			    				int col = i % 6;
-			    				 int row = i / 6;
-			    				 
-			    				 
-			    				 if(col <= 2 && row <= 2) {
+			    				 if(i <= 8) {
 			    					 mQuadrant = 1;
-			    				 } else if(col > 2 && row <= 2) {
+			    				 } else if(i <= 17) {
 			    					 mQuadrant = 2;
-			    				 } else if(col <= 2 && row > 2) {
+			    				 } else if(i <= 26) {
 			    					 mQuadrant = 3;
-			    				 } else if(col > 2 && row > 2) {
+			    				 } else if(i <=35) {
 			    					 mQuadrant = 4;
 			    				 }
 			    			}

@@ -1,21 +1,3 @@
-/*
- * Copyright (C) 2010 By Frank McCown at Harding University
- * 
- * This is the solution to Tutorial 6.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package edu.harding.AndroidPentago;
 
 import java.util.Random;
@@ -254,18 +236,19 @@ public class PentagoGame {
 
         int returnValue = 0;
         short[] possibilities = new short[12];
-        possibilities[0] = (short)CheckPiecesOnBoard(new Point(0, 0), new Point(0, 1), new Point(0, 2), new Point(0, 3), new Point(0, 4));
-        possibilities[1] = (short)CheckPiecesOnBoard(new Point(0, 1), new Point(0, 2), new Point(0, 3), new Point(0, 4), new Point(0, 5));
-        possibilities[2] = (short)CheckPiecesOnBoard(new Point(1, 0), new Point(1, 1), new Point(1, 2), new Point(1, 3), new Point(1, 4));
-        possibilities[3] = (short)CheckPiecesOnBoard(new Point(1, 1), new Point(1, 2), new Point(1, 3), new Point(1, 4), new Point(1, 5));
-        possibilities[4] = (short)CheckPiecesOnBoard(new Point(2, 0), new Point(2, 1), new Point(2, 2), new Point(2, 3), new Point(2, 4));
-        possibilities[5] = (short)CheckPiecesOnBoard(new Point(2, 1), new Point(2, 2), new Point(2, 3), new Point(2, 4), new Point(2, 5));
-        possibilities[6] = (short)CheckPiecesOnBoard(new Point(3, 0), new Point(3, 1), new Point(3, 2), new Point(3, 3), new Point(3, 4));
-        possibilities[7] = (short)CheckPiecesOnBoard(new Point(3, 1), new Point(3, 2), new Point(3, 3), new Point(3, 4), new Point(3, 5));
-        possibilities[8] = (short)CheckPiecesOnBoard(new Point(4, 0), new Point(4, 1), new Point(4, 2), new Point(4, 3), new Point(4, 4));
-        possibilities[9] = (short)CheckPiecesOnBoard(new Point(4, 1), new Point(4, 2), new Point(4, 3), new Point(4, 4), new Point(4, 5));
-        possibilities[10] = (short)CheckPiecesOnBoard(new Point(5, 0), new Point(5, 1), new Point(5, 2), new Point(5, 3), new Point(5, 4));
-        possibilities[11] = (short)CheckPiecesOnBoard(new Point(5, 1), new Point(5, 2), new Point(5, 3), new Point(5, 4), new Point(5, 5));
+//        possibilities[0] = (short)CheckPiecesOnBoard(new Point(0, 0), new Point(0, 1), new Point(0, 2), new Point(0, 3), new Point(0, 4));
+        possibilities[0] = (short)CheckPiecesOnBoard(new Point(0, 0), new Point(0, 1), new Point(0, 2), new Point(1, 3), new Point(1, 4));
+        possibilities[1] = (short)CheckPiecesOnBoard(new Point(0, 1), new Point(0, 2), new Point(1, 3), new Point(1, 4), new Point(1, 5));
+        possibilities[2] = (short)CheckPiecesOnBoard(new Point(0, 3), new Point(0, 4), new Point(0, 5), new Point(2, 0), new Point(2, 1));
+        possibilities[3] = (short)CheckPiecesOnBoard(new Point(0, 4), new Point(0, 5), new Point(2, 0), new Point(2, 1), new Point(2, 2));
+        possibilities[4] = (short)CheckPiecesOnBoard(new Point(1, 0), new Point(1, 1), new Point(1, 2), new Point(2, 3), new Point(2, 4));
+        possibilities[5] = (short)CheckPiecesOnBoard(new Point(1, 1), new Point(1, 2), new Point(2, 3), new Point(2, 4), new Point(2, 5));
+        possibilities[6] = (short)CheckPiecesOnBoard(new Point(3, 0), new Point(3, 1), new Point(3, 2), new Point(4, 3), new Point(4, 4));
+        possibilities[7] = (short)CheckPiecesOnBoard(new Point(3, 1), new Point(3, 2), new Point(4, 3), new Point(4, 4), new Point(4, 5));
+        possibilities[8] = (short)CheckPiecesOnBoard(new Point(3, 3), new Point(3, 4), new Point(3, 5), new Point(5, 0), new Point(5, 1));
+        possibilities[9] = (short)CheckPiecesOnBoard(new Point(3, 4), new Point(3, 5), new Point(5, 0), new Point(5, 1), new Point(5, 2));
+        possibilities[10] = (short)CheckPiecesOnBoard(new Point(4, 0), new Point(4, 1), new Point(4, 2), new Point(5, 3), new Point(5, 4));
+        possibilities[11] = (short)CheckPiecesOnBoard(new Point(4, 1), new Point(4, 2), new Point(5, 3), new Point(5, 4), new Point(5, 5));
 
         short s;
         
@@ -304,18 +287,18 @@ public class PentagoGame {
         int returnValue = 0;
         short[] possibilities = new short[12];
 
-        possibilities[0] = (short)CheckPiecesOnBoard(new Point(0, 0), new Point(1, 0), new Point(2, 0), new Point(3, 0), new Point(4, 0));
-        possibilities[1] = (short)CheckPiecesOnBoard(new Point(1, 0), new Point(2, 0), new Point(3, 0), new Point(4, 0), new Point(5, 0));
-        possibilities[2] = (short)CheckPiecesOnBoard(new Point(0, 1), new Point(1, 1), new Point(2, 1), new Point(3, 1), new Point(4, 1));
-        possibilities[3] = (short)CheckPiecesOnBoard(new Point(1, 1), new Point(2, 1), new Point(3, 1), new Point(4, 1), new Point(5, 1));
-        possibilities[4] = (short)CheckPiecesOnBoard(new Point(0, 2), new Point(1, 2), new Point(2, 2), new Point(3, 2), new Point(4, 2));
-        possibilities[5] = (short)CheckPiecesOnBoard(new Point(1, 2), new Point(2, 2), new Point(3, 2), new Point(4, 2), new Point(5, 2));
-        possibilities[6] = (short)CheckPiecesOnBoard(new Point(0, 3), new Point(1, 3), new Point(2, 3), new Point(3, 3), new Point(4, 3));
-        possibilities[7] = (short)CheckPiecesOnBoard(new Point(1, 3), new Point(2, 3), new Point(3, 3), new Point(4, 3), new Point(5, 3));
-        possibilities[8] = (short)CheckPiecesOnBoard(new Point(0, 4), new Point(1, 4), new Point(2, 4), new Point(3, 4), new Point(4, 4));
-        possibilities[9] = (short)CheckPiecesOnBoard(new Point(1, 4), new Point(2, 4), new Point(3, 4), new Point(4, 4), new Point(5, 4));
-        possibilities[10] = (short)CheckPiecesOnBoard(new Point(0, 5), new Point(1, 5), new Point(2, 5), new Point(3, 5), new Point(4, 5));
-        possibilities[11] = (short)CheckPiecesOnBoard(new Point(1, 5), new Point(2, 5), new Point(3, 5), new Point(4, 5), new Point(5, 5));
+        possibilities[0] = (short)CheckPiecesOnBoard(new Point(0, 0), new Point(0, 3), new Point(1, 0), new Point(3, 0), new Point(3, 3));
+        possibilities[1] = (short)CheckPiecesOnBoard(new Point(0, 3), new Point(1, 0), new Point(3, 0), new Point(3, 3), new Point(4, 0));
+        possibilities[2] = (short)CheckPiecesOnBoard(new Point(0, 1), new Point(0, 4), new Point(1, 1), new Point(3, 1), new Point(3, 4));
+        possibilities[3] = (short)CheckPiecesOnBoard(new Point(0, 4), new Point(1, 1), new Point(3, 1), new Point(3, 4), new Point(4, 1));
+        possibilities[4] = (short)CheckPiecesOnBoard(new Point(0, 2), new Point(0, 5), new Point(1, 2), new Point(3, 2), new Point(3, 5));
+        possibilities[5] = (short)CheckPiecesOnBoard(new Point(0, 5), new Point(1, 2), new Point(3, 2), new Point(3, 5), new Point(4, 2));
+        possibilities[6] = (short)CheckPiecesOnBoard(new Point(1, 3), new Point(2, 0), new Point(2, 3), new Point(4, 3), new Point(5, 0));
+        possibilities[7] = (short)CheckPiecesOnBoard(new Point(2, 0), new Point(2, 3), new Point(4, 3), new Point(5, 0), new Point(5, 3));
+        possibilities[8] = (short)CheckPiecesOnBoard(new Point(1, 4), new Point(2, 1), new Point(2, 4), new Point(4, 4), new Point(5, 1));
+        possibilities[9] = (short)CheckPiecesOnBoard(new Point(2, 1), new Point(2, 4), new Point(4, 4), new Point(5, 1), new Point(5, 4));
+        possibilities[10] = (short)CheckPiecesOnBoard(new Point(1, 5), new Point(2, 2), new Point(2, 5), new Point(4, 5), new Point(5, 2));
+        possibilities[11] = (short)CheckPiecesOnBoard(new Point(2, 2), new Point(2, 5), new Point(4, 5), new Point(5, 2), new Point(5, 5));
 
         short s;
         
@@ -354,17 +337,14 @@ public class PentagoGame {
         int returnValue = 0;
         short[] possibilities = new short[8];
 
-        // Top Left to Bottom Rights
-        possibilities[0] = (short)CheckPiecesOnBoard(new Point(0, 1), new Point(1, 2), new Point(2, 3), new Point(3, 4), new Point(4, 5));
-        possibilities[1] = (short)CheckPiecesOnBoard(new Point(0, 0), new Point(1, 1), new Point(2, 2), new Point(3, 3), new Point(4, 4));
-        possibilities[2] = (short)CheckPiecesOnBoard(new Point(1, 1), new Point(2, 2), new Point(3, 3), new Point(4, 4), new Point(5, 5));
-        possibilities[3] = (short)CheckPiecesOnBoard(new Point(1, 0), new Point(2, 1), new Point(3, 2), new Point(4, 3), new Point(5, 4));
-
-        // Bottom Left to Top Rights
-        possibilities[4] = (short)CheckPiecesOnBoard(new Point(0, 4), new Point(1, 3), new Point(2, 2), new Point(3, 1), new Point(4, 0));
-        possibilities[5] = (short)CheckPiecesOnBoard(new Point(0, 5), new Point(1, 4), new Point(2, 3), new Point(3, 2), new Point(4, 1));
-        possibilities[6] = (short)CheckPiecesOnBoard(new Point(1, 4), new Point(2, 3), new Point(3, 2), new Point(4, 1), new Point(5, 0));
-        possibilities[7] = (short)CheckPiecesOnBoard(new Point(1, 5), new Point(2, 4), new Point(3, 3), new Point(4, 2), new Point(5, 1));
+        possibilities[0] = (short)CheckPiecesOnBoard(new Point(0, 0), new Point(0, 4), new Point(1, 2), new Point(4, 3), new Point(5, 1));
+        possibilities[1] = (short)CheckPiecesOnBoard(new Point(5, 5), new Point(0, 4), new Point(1, 2), new Point(4, 3), new Point(5, 1));
+        possibilities[2] = (short)CheckPiecesOnBoard(new Point(4, 0), new Point(3, 4), new Point(3, 2), new Point(2, 3), new Point(2, 1));
+        possibilities[3] = (short)CheckPiecesOnBoard(new Point(1, 5), new Point(3, 4), new Point(3, 2), new Point(2, 3), new Point(2, 1));
+        possibilities[4] = (short)CheckPiecesOnBoard(new Point(4, 1), new Point(3, 5), new Point(4, 3), new Point(2, 4), new Point(2, 2));
+        possibilities[5] = (short)CheckPiecesOnBoard(new Point(3, 3), new Point(3, 1), new Point(1, 2), new Point(2, 0), new Point(1, 4));
+        possibilities[6] = (short)CheckPiecesOnBoard(new Point(0, 1), new Point(0, 5), new Point(2, 3), new Point(4, 4), new Point(5, 2));
+        possibilities[7] = (short)CheckPiecesOnBoard(new Point(0, 3), new Point(1, 1), new Point(3, 2), new Point(5, 0), new Point(5, 4));
 
         short s;
         
@@ -461,7 +441,7 @@ public class PentagoGame {
     	}
     	else if (quadrant == 2)
     	{
-    		topLeftPos = 3;
+    		topLeftPos = 9;
     	}
     	else if (quadrant == 3)
     	{
@@ -469,21 +449,21 @@ public class PentagoGame {
     	}
     	else
     	{
-    		topLeftPos = 21;
+    		topLeftPos = 27;
     	}
     	
     	char temp = mBoard[topLeftPos];
     	
-    	mBoard[topLeftPos] = mBoard[topLeftPos + 12];
-    	mBoard[topLeftPos + 12] = mBoard[topLeftPos + 14];
-    	mBoard[topLeftPos + 14] = mBoard[topLeftPos + 2];
+    	mBoard[topLeftPos] = mBoard[topLeftPos + 6];
+    	mBoard[topLeftPos + 6] = mBoard[topLeftPos + 8];
+    	mBoard[topLeftPos + 8] = mBoard[topLeftPos + 2];
     	mBoard[topLeftPos + 2] = temp;
     	
-    	temp = mBoard[topLeftPos + 6];
-    	mBoard[topLeftPos + 6] = mBoard[topLeftPos + 13];
-    	mBoard[topLeftPos + 13] = mBoard[topLeftPos + 8];
-    	mBoard[topLeftPos + 8] = mBoard[topLeftPos + 1];
-    	mBoard[topLeftPos + 1] = temp;
+    	temp = mBoard[topLeftPos + 1];
+    	mBoard[topLeftPos + 1] = mBoard[topLeftPos + 3];
+    	mBoard[topLeftPos + 3] = mBoard[topLeftPos + 7];
+    	mBoard[topLeftPos + 7] = mBoard[topLeftPos + 5];
+    	mBoard[topLeftPos + 5] = temp;
     }
 	
 	private void rotateCounterClockwise(int quadrant)
@@ -495,7 +475,7 @@ public class PentagoGame {
     	}
     	else if (quadrant == 2)
     	{
-    		topLeftPos = 3;
+    		topLeftPos = 9;
     	}
     	else if (quadrant == 3)
     	{
@@ -503,21 +483,21 @@ public class PentagoGame {
     	}
     	else
     	{
-    		topLeftPos = 21;
+    		topLeftPos = 27;
     	}
     	
     	char temp = mBoard[topLeftPos];
     	
     	mBoard[topLeftPos] = mBoard[topLeftPos + 2];
-    	mBoard[topLeftPos + 2] = mBoard[topLeftPos + 14];
-    	mBoard[topLeftPos + 14] = mBoard[topLeftPos + 12];
-    	mBoard[topLeftPos + 12] = temp;
+    	mBoard[topLeftPos + 2] = mBoard[topLeftPos + 8];
+    	mBoard[topLeftPos + 8] = mBoard[topLeftPos + 6];
+    	mBoard[topLeftPos + 6] = temp;
     	
-    	temp = mBoard[topLeftPos + 6];
-    	mBoard[topLeftPos + 6] = mBoard[topLeftPos + 1];
-    	mBoard[topLeftPos + 1] = mBoard[topLeftPos + 8];
-    	mBoard[topLeftPos + 8] = mBoard[topLeftPos + 13];
-    	mBoard[topLeftPos + 13] = temp;
+    	temp = mBoard[topLeftPos + 1];
+    	mBoard[topLeftPos + 1] = mBoard[topLeftPos + 5];
+    	mBoard[topLeftPos + 5] = mBoard[topLeftPos + 7];
+    	mBoard[topLeftPos + 7] = mBoard[topLeftPos + 3];
+    	mBoard[topLeftPos + 3] = temp;
     }
 	
 	/** Get the AI's difficulty level.
