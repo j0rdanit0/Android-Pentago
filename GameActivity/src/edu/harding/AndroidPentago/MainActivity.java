@@ -24,12 +24,13 @@ public class MainActivity extends Activity {
 	private float mAccelCurrent;
 	private float mAccelLast;
 
-	private Button mNewGameButton;
+	private Button mSinglePlayerButton;
+	private Button mTwoPlayerButton;
 	private Button mSettings;
 	private Button mHelp;
 	private Button mRecords;
 
-	private final SensorEventListener mSensorListener = new SensorEventListener() {
+	/*private final SensorEventListener mSensorListener = new SensorEventListener() {
 		public void onSensorChanged(SensorEvent se) {
 			float x = se.values[0];
 			float y = se.values[1];
@@ -47,7 +48,7 @@ public class MainActivity extends Activity {
 		public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
 		}
-	};
+	};*/
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
@@ -55,14 +56,28 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		mNewGameButton = (Button)findViewById(R.id.new_game_button);
-		mNewGameButton.setOnClickListener(new View.OnClickListener() 
+		mSinglePlayerButton = (Button)findViewById(R.id.single_player_button);
+		mSinglePlayerButton.setOnClickListener(new View.OnClickListener() 
 		{
 
 			@Override
 			public void onClick(View v) 
 			{
 				Intent i = new Intent(MainActivity.this, GameActivity.class);
+				i.putExtra("PvP", false);
+				startActivity(i);
+			}
+		});
+		
+		mTwoPlayerButton = (Button)findViewById(R.id.two_player_button);
+		mTwoPlayerButton.setOnClickListener(new View.OnClickListener() 
+		{
+
+			@Override
+			public void onClick(View v) 
+			{
+				Intent i = new Intent(MainActivity.this, GameActivity.class);
+				i.putExtra("PvP", true);
 				startActivity(i);
 			}
 		});
@@ -106,7 +121,7 @@ public class MainActivity extends Activity {
 		mRecords.setEnabled(false);
 
 		mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-	    mSensorManager.registerListener(mSensorListener, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
+	    //mSensorManager.registerListener(mSensorListener, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
 	    mAccel = 0.00f;
 	    mAccelCurrent = SensorManager.GRAVITY_EARTH;
 	    mAccelLast = SensorManager.GRAVITY_EARTH;
@@ -116,7 +131,7 @@ public class MainActivity extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) 
 	{
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.game_options, menu);
+		//getMenuInflater().inflate(R.menu.game_options, menu);
 		return true;
 	}
 
@@ -124,13 +139,13 @@ public class MainActivity extends Activity {
 	  protected void onResume() 
 	  {
 	    super.onResume();
-	    mSensorManager.registerListener(mSensorListener, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
+	    //mSensorManager.registerListener(mSensorListener, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
 	  }
 
 	  @Override
 	  protected void onPause() 
 	  {
-	    mSensorManager.unregisterListener(mSensorListener);
+	    //mSensorManager.unregisterListener(mSensorListener);
 	    super.onPause();
 	  }
 

@@ -15,6 +15,7 @@ public class GameActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_game);
+		boolean PvP = getIntent().getExtras().getBoolean("PvP");
 		
 		Log.d(LOGTAG, "onCreate - GameActivity");
 		
@@ -23,7 +24,10 @@ public class GameActivity extends FragmentActivity {
 		
 		if (fragment == null) {
 			Log.d(LOGTAG, "Creating fragment");
+			Bundle args = new Bundle();
+			args.putBoolean("PvP", PvP);
 			fragment = new GameFragment();
+			fragment.setArguments(args);
 			fm.beginTransaction()
 				.add(R.id.fragmentContainer, fragment)
 				.commit();

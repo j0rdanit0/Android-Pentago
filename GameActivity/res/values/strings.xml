@@ -5,6 +5,8 @@
     
     <string name="game_settings">Settings</string>
     <string name="new_game">New Game</string>
+    <string name="singlePlayer">Single Player</string>
+    <string name="twoPlayer">Two Players</string>
     
     <string name="score_label_human">Human:</string>
     <string name="score_label_computer">Android:</string>

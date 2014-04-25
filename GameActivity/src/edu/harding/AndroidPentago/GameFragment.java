@@ -93,6 +93,8 @@ public class GameFragment extends Fragment {
 		
 		// Cause onCreateOptionsMenu to trigger
 		setHasOptionsMenu(true);
+		Bundle args = getArguments();
+		mPvP = args.getBoolean("PvP");
 		
 		// Retain this fragment across configuration changes
 		// This fragment is explicitly storing/restoring its own state instead.
@@ -185,7 +187,7 @@ public class GameFragment extends Fragment {
 
 	
 		
-		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		/*AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		builder.setSingleChoiceItems(new CharSequence[] {"PvP", "AI"} , 0, 
 				new DialogInterface.OnClickListener() {
 			
@@ -202,13 +204,13 @@ public class GameFragment extends Fragment {
 					new DialogInterface.OnClickListener() {
 			
 			@Override
-			public void onClick(DialogInterface dialog, int which) {
+			public void onClick(DialogInterface dialog, int which) {*/
 					if(mPvP) {
 						pvpNamesDialog.show();
 					} else {
 						aiNamesDialog.show();
 					}
-			}
+			/*}
 		}).setNegativeButton(R.string.cancel_button, 
 				new DialogInterface.OnClickListener() {
 			
@@ -217,9 +219,9 @@ public class GameFragment extends Fragment {
 				// TODO Auto-generated method stub
 				
 			}
-		}).create();
+		}).create();*/
 		
-		builder.show();
+		//builder.show();
 		
 		if (mGame == null) {
 			mGame = new PentagoGame();
@@ -343,7 +345,7 @@ public class GameFragment extends Fragment {
 		super.onSaveInstanceState(outState);		
 		outState.putCharArray("board", mGame.getBoardState());		
 		outState.putBoolean("mGameOver", mGameOver);	
-		outState.putCharSequence("info", mInfoTextView.getText());
+		//outState.putCharSequence("info", mInfoTextView.getText());
 		outState.putChar("mGoFirst", mGoFirst);
 		outState.putChar("mTurn", mTurn);		
 	}
@@ -356,7 +358,7 @@ public class GameFragment extends Fragment {
         	startNewGame();
             return true;
         case R.id.settings: 
-        	startActivityForResult(new Intent(getActivity(), Settings.class), 0);     	
+        	startActivityForResult(new Intent(getActivity(), SettingsActivity.class), 0);     	
         	return true;
        /* case R.id.reset_scores:
         	mHumanWins = 0;
@@ -450,17 +452,22 @@ public class GameFragment extends Fragment {
     		// Alternate who goes first
     		if (mGoFirst == PentagoGame.PLAYER_2) {    		
         		mGoFirst = PentagoGame.PLAYER_1;
-        		mTurn = PentagoGame.PLAYER_2;        		
+        		mTurn = PentagoGame.PLAYER_2;  
+        		if (mPvP == false) {
+        			makeComputerMove();
+        		}
         	}
         	else {
         		mGoFirst = PentagoGame.PLAYER_2;
         		mTurn = PentagoGame.PLAYER_1;
         	}	
     	}
-    	else if (goesFirst.equals(getResources().getString(R.string.goes_first_human))) 
+    	/*else if (goesFirst.equals(getResources().getString(R.string.goes_first_human))) 
     		mTurn = PentagoGame.PLAYER_1;    	
-    	else
+    	else {
     		mTurn = PentagoGame.PLAYER_2;
+    		makeComputerMove();
+    	}*/
     	
     	// Start the game
     	//if (mTurn == PentagoGame.PLAYER_2) {
