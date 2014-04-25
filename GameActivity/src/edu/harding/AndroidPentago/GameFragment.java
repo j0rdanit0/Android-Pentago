@@ -22,6 +22,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
+import android.view.ViewTreeObserver;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.Chronometer;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -255,15 +258,13 @@ public class GameFragment extends Fragment {
 		
 		DisplayMetrics dm = new DisplayMetrics();
 		getActivity().getWindowManager().getDefaultDisplay().getMetrics(dm);
-		int width = dm.widthPixels / 9;
-		int height = width;
+		int width = dm.widthPixels / 6;
 		
 		for (int i = 0; i < mImages.length; i++)
 		{
 			mImages[i] = new ImageView(getActivity());
 			mImages[i].setImageResource(R.drawable.blank);
-			FrameLayout.LayoutParams params = new FrameLayout.LayoutParams
-					(width, height);
+			FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(width, width);
 			params.gravity = imageGravity[i];
 			
 			mImages[i].setLayoutParams(params);
@@ -271,11 +272,21 @@ public class GameFragment extends Fragment {
 			mImages[i].setId(i);
 		}
 		
+		
 		for(int j = 0; j < mImages.length; j++) {
 			int index = j / 9;
 			mBoardImages[index].addView(mImages[j]);
 			mBoardImages[index].bringChildToFront(mImages[j]);
 		}
+		
+		/*ViewTreeObserver vto = mImages[0].getViewTreeObserver();
+	    vto.addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
+	        @Override
+	        public void onGlobalLayout() {
+	        int imageWidth = mImages[0].getWidth();
+	        int imageHeight = mImages[0].getHeight(); 
+	    }
+	    });*/
 		
 		updateImages();
 		
