@@ -137,11 +137,11 @@ public class GameFragment extends Fragment {
 				mPlayer1Name = player1Name.getText().toString();
 				mPlayer2Name = player2Name.getText().toString();
 				
-				if(mPlayer1Name.trim().equals("")) {
+				if(mPlayer1Name.trim().equals("") || player1Name.equals(null)) {
 					mPlayer1Name = "Player 1";
 				}
 				
-				if(mPlayer2Name.trim().equals("")) {
+				if(mPlayer2Name.trim().equals("")|| player2Name.equals(null)) {
 					mPlayer2Name = "Player 2";
 				}
 			}
@@ -157,7 +157,7 @@ public class GameFragment extends Fragment {
 		}).create();
 		
 		aiNamesDialog = new AlertDialog.Builder(getActivity());
-		aiNamesDialog.setView(inflater.inflate(R.layout.ai_dialog, null))
+		aiNamesDialog.setView(aiNameView)
 			.setPositiveButton(R.string.ok_button, 
 					new DialogInterface.OnClickListener() {
 			
@@ -168,7 +168,7 @@ public class GameFragment extends Fragment {
 				mPlayer1Name = playerName.getText().toString();
 				mPlayer2Name = "Android";
 				
-				if(mPlayer1Name.trim().equals("")) {
+				if(mPlayer1Name.trim().equals("") || mPlayer1Name.equals(null)) {
 					mPlayer1Name = "Player 1";
 				}
 				
@@ -423,7 +423,6 @@ public class GameFragment extends Fragment {
 		// See if Back button was pressed on Settings activity
         if (requestCode == Activity.RESULT_CANCELED) {
         	// Apply potentially new settings      
-        	
         	loadPreferences();	    	
         }
 	}
@@ -439,6 +438,8 @@ public class GameFragment extends Fragment {
     private void startNewGame() {   	
     	
     	mGame.newGame();  
+    	mChronometer.stop();
+    	mChronometer.setBase(SystemClock.elapsedRealtime());
     	mPlacePiece = true;
     	for (int i = 0; i < mImages.length; i++)
 		{
@@ -524,7 +525,7 @@ public class GameFragment extends Fragment {
     		return true;
     	}*/
     	
-    	
+    	mChronometer.start();
     	int winner = mGame.checkForWinner();
     	
     	if(player == PentagoGame.PLAYER_2 && mGame.setMove(PentagoGame.PLAYER_2, location)) {
@@ -569,7 +570,10 @@ public class GameFragment extends Fragment {
     		Toast.makeText(getActivity(), mPlayer2Name + " won!", Toast.LENGTH_LONG).show();
     		//mComputerScoreTextView.setText(Integer.toString(mComputerWins));
     		//updateInfoText(R.string.result_computer_wins);
-    		mAudioPlayer.play(getActivity(), R.raw.lose);
+    		if(!mPvP)
+    			mAudioPlayer.play(getActivity(), R.raw.lose);
+    		else
+    			mAudioPlayer.play(getActivity(), R.raw.cheer);
     	}
     	
     	mGameOver = true;
