@@ -151,6 +151,7 @@ public class GameFragment extends Fragment {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				Intent i = new Intent(getActivity(), MainActivity.class);
+                		i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 				startActivity(i);
 				
 			}
@@ -183,6 +184,7 @@ public class GameFragment extends Fragment {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				Intent i = new Intent(getActivity(), MainActivity.class);
+                		i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 				startActivity(i);
 				
 			}
