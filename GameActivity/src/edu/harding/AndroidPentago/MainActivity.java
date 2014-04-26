@@ -94,7 +94,6 @@ public class MainActivity extends Activity {
 			}
 		});
 
-		//LayoutInflater inflater = new LayoutInflater(MainActivity.this);
 		mHelp = (Button)findViewById(R.id.help_button);
 		mHelp.setOnClickListener(new View.OnClickListener() 
 		{
@@ -102,29 +101,13 @@ public class MainActivity extends Activity {
 			@Override
 			public void onClick(View v) 
 			{
-				AlertDialog.Builder helpDialog = new AlertDialog.Builder(MainActivity.this);
-				helpDialog.setView(getLayoutInflater().inflate(R.layout.help_dialog, null))
-					.setPositiveButton(R.string.ok_button, 
-							new DialogInterface.OnClickListener() {
-					
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						
-					}
-				}).create();
-				
-				helpDialog.show(); 
+				Intent i = new Intent(MainActivity.this, HelpActivity.class);
+				startActivity(i);
 			}
 		});
 
 		mRecords = (Button)findViewById(R.id.records_button);
 		mRecords.setEnabled(false);
-
-		mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-	    //mSensorManager.registerListener(mSensorListener, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
-	    mAccel = 0.00f;
-	    mAccelCurrent = SensorManager.GRAVITY_EARTH;
-	    mAccelLast = SensorManager.GRAVITY_EARTH;
 	}
 
 	@Override

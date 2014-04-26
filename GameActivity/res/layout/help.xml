@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView  xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    
+    <LinearLayout
+        android:id="@+id/beg"
+        android:layout_width = "match_parent"
+        android:layout_height = "wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:orientation="horizontal"
+        android:weightSum="1">
+    
+	    <TextView
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_weight=".8"
+	        android:textSize="15sp"
+	        android:text="@string/beginning" />
+	    
+	    <ImageView
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_weight=".2"
+	        android:layout_marginLeft="5dp"
+	        android:src="@drawable/full_board" />
+    </LinearLayout>
+    
+    <LinearLayout
+        android:id="@+id/place_piece"
+        android:layout_width = "match_parent"
+        android:layout_height = "wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:orientation="horizontal"
+        android:layout_below="@id/beg"
+        android:weightSum="1">
+	    
+        <ImageView
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_weight=".2"
+	        android:src="@drawable/rotating_board" />
+    
+	    <TextView
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_weight=".8"
+	        android:layout_marginLeft="5dp"
+	        android:textSize="15sp"
+	        android:text="@string/placePiece" />
+	    
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/winGame"
+        android:layout_width = "match_parent"
+        android:layout_height = "wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:orientation="horizontal"
+        android:layout_below="@id/place_piece"
+        android:weightSum="1">
+    
+	    <TextView
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_weight=".8"
+	        android:textSize="15sp"
+	        android:text="@string/winning" />
+	    
+	    <ImageView
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_weight=".2"
+	        android:layout_marginLeft="5dp"
+	        android:src="@drawable/win" />
+	    
+    </LinearLayout>
+    
+    <LinearLayout
+        android:id="@+id/tieGame"
+        android:layout_width = "match_parent"
+        android:layout_height = "wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="5dp"
+        android:orientation="horizontal"
+        android:layout_below="@id/winGame"
+        android:weightSum="1">
+	    
+        <ImageView
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_weight=".2"
+	        android:src="@drawable/draw" />
+    
+	    <TextView
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_weight=".8"
+	        android:layout_marginLeft="5dp"
+	        android:textSize="15sp"
+	        android:text="@string/draw" />
+	    
+    </LinearLayout>
+    
+
+</RelativeLayout>
+</ScrollView>

@@ -29,14 +29,19 @@ public final class R {
         public static final int blank=0x7f020001;
         public static final int clockwise=0x7f020002;
         public static final int counter_clockwise=0x7f020003;
-        public static final int ic_launcher=0x7f020004;
-        public static final int quadrant=0x7f020005;
-        public static final int white_piece=0x7f020006;
+        public static final int draw=0x7f020004;
+        public static final int full_board=0x7f020005;
+        public static final int ic_launcher=0x7f020006;
+        public static final int quadrant=0x7f020007;
+        public static final int rotating_board=0x7f020008;
+        public static final int white_piece=0x7f020009;
+        public static final int win=0x7f02000a;
     }
     public static final class id {
         public static final int ai_score=0x7f0b002a;
         public static final int ai_score_label=0x7f0b0029;
         public static final int animationsCheckBox=0x7f0b0012;
+        public static final int beg=0x7f0b002b;
         public static final int board=0x7f0b0023;
         public static final int bottomLeft=0x7f0b001c;
         public static final int bottomRight=0x7f0b001e;
@@ -53,9 +58,10 @@ public final class R {
         public static final int masterVolumeTextView=0x7f0b000c;
         public static final int musicVolumeControl=0x7f0b000f;
         public static final int musicVolumeTextView=0x7f0b000e;
-        public static final int new_game=0x7f0b002d;
-        public static final int player1Name=0x7f0b002b;
-        public static final int player2Name=0x7f0b002c;
+        public static final int new_game=0x7f0b0031;
+        public static final int place_piece=0x7f0b002c;
+        public static final int player1Name=0x7f0b002f;
+        public static final int player2Name=0x7f0b0030;
         public static final int playerName=0x7f0b0016;
         public static final int player_score=0x7f0b0026;
         public static final int player_score_label=0x7f0b0025;
@@ -65,7 +71,7 @@ public final class R {
         public static final int quadrant4=0x7f0b001d;
         public static final int records_button=0x7f0b000b;
         public static final int saveButton=0x7f0b0015;
-        public static final int settings=0x7f0b002e;
+        public static final int settings=0x7f0b0032;
         public static final int settings_button=0x7f0b0007;
         public static final int sfxVolumeControl=0x7f0b0011;
         public static final int sfxVolumeTextView=0x7f0b0010;
@@ -76,11 +82,13 @@ public final class R {
         public static final int tableRow4=0x7f0b000a;
         public static final int tableRow5=0x7f0b0004;
         public static final int textView1=0x7f0b0001;
+        public static final int tieGame=0x7f0b002e;
         public static final int tie_score=0x7f0b0028;
         public static final int tie_score_label=0x7f0b0027;
         public static final int topLeft=0x7f0b0018;
         public static final int topRight=0x7f0b001a;
         public static final int two_player_button=0x7f0b0005;
+        public static final int winGame=0x7f0b002d;
     }
     public static final class layout {
         public static final int activity_game=0x7f030000;
@@ -88,7 +96,7 @@ public final class R {
         public static final int activity_settings=0x7f030002;
         public static final int ai_dialog=0x7f030003;
         public static final int fragment_game=0x7f030004;
-        public static final int help_dialog=0x7f030005;
+        public static final int help=0x7f030005;
         public static final int pvp_dialog=0x7f030006;
     }
     public static final class menu {
@@ -105,11 +113,13 @@ public final class R {
         public static final int PvP=0x7f080020;
         public static final int animations=0x7f08002b;
         public static final int app_name=0x7f080000;
+        public static final int beginning=0x7f08002c;
         public static final int cancel_button=0x7f08001c;
         public static final int difficulty_choose=0x7f08000f;
         public static final int difficulty_easy=0x7f080010;
         public static final int difficulty_expert=0x7f080012;
         public static final int difficulty_harder=0x7f080011;
+        public static final int draw=0x7f08002f;
         public static final int edit_player=0x7f08001f;
         public static final int first_computer=0x7f080009;
         public static final int first_human=0x7f080008;
@@ -129,13 +139,13 @@ public final class R {
         public static final int newGame=0x7f080023;
         public static final int new_game=0x7f080002;
         public static final int ok_button=0x7f08001b;
+        public static final int placePiece=0x7f08002d;
         public static final int player1_name_label=0x7f080017;
         public static final int player2_name_label=0x7f080018;
         public static final int records=0x7f080026;
         public static final int result_computer_wins=0x7f08000e;
         public static final int result_human_wins=0x7f08000d;
         public static final int result_tie=0x7f08000c;
-        public static final int rules=0x7f08002c;
         public static final int save_button=0x7f08001e;
         public static final int score_label_computer=0x7f080006;
         public static final int score_label_human=0x7f080005;
@@ -146,6 +156,7 @@ public final class R {
         public static final int turn_human=0x7f08000a;
         public static final int twoPlayer=0x7f080004;
         public static final int welcome=0x7f080027;
+        public static final int winning=0x7f08002e;
     }
     public static final class style {
         /** 

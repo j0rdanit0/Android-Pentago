@@ -279,15 +279,6 @@ public class GameFragment extends Fragment {
 			mBoardImages[index].bringChildToFront(mImages[j]);
 		}
 		
-		/*ViewTreeObserver vto = mImages[0].getViewTreeObserver();
-	    vto.addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
-	        @Override
-	        public void onGlobalLayout() {
-	        int imageWidth = mImages[0].getWidth();
-	        int imageHeight = mImages[0].getHeight(); 
-	    }
-	    });*/
-		
 		updateImages();
 		
 		mClockwiseImage = (ImageView)v.findViewById(R.id.clockwise);
