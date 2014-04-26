@@ -46,15 +46,17 @@
     </LinearLayout>
 
     <CheckBox
-        android:id="@+id/checkBox1"
+        android:id="@+id/confirmMoves"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:checked="true"
         android:text="@string/confirmMoves" />
 
     <CheckBox
         android:id="@+id/animationsCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:checked="true"
         android:text="@string/animations" />
 
     <Button

@@ -50,9 +50,9 @@ public final class R {
         public static final int bottomRight=0x7f0b001f;
         public static final int buttonsRow=0x7f0b0020;
         public static final int cancelButton=0x7f0b0015;
-        public static final int checkBox1=0x7f0b0012;
         public static final int chronometer=0x7f0b0022;
         public static final int clockwise=0x7f0b0023;
+        public static final int confirmMoves=0x7f0b0012;
         public static final int counterClockwise=0x7f0b0021;
         public static final int editPlayerButton=0x7f0b0014;
         public static final int fragmentContainer=0x7f0b0000;

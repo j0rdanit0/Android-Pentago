@@ -78,6 +78,7 @@ public class GameFragment extends Fragment {
 	private SharedPreferences mPrefs;
 	
 	private boolean mSoundOn;
+	private boolean mConfirmMoves;
 	
 	private ImageView mImages[] = new ImageView[36];
 	
@@ -114,6 +115,7 @@ public class GameFragment extends Fragment {
 			Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.fragment_game, container, false);
 		
+		mConfirmMoves = SettingsActivity.getConfirmMoves();
 		// Clear prefs for testing
 		//mPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity()); 
 		//mPrefs.edit().clear().commit();
@@ -679,33 +681,43 @@ public class GameFragment extends Fragment {
 			    		if (mImages[i].getId() == viewId && mPlacePiece)
 			    		{
 			    			if(!mGameOver && mTurn == PentagoGame.PLAYER_1) {
-			    				if(mConfirmIndex == -1  && setMove(PentagoGame.PLAYER_1, i, false)) {
-			    					mImages[i].setImageResource(R.drawable.white_piece_selected);
-			    					mConfirmIndex = i;
-			    				} else if (i != mConfirmIndex && setMove(PentagoGame.PLAYER_1, i, false)){
-			    					mImages[mConfirmIndex].setImageResource(R.drawable.blank);
-			    					mImages[i].setImageResource(R.drawable.white_piece_selected);
-			    					mConfirmIndex = i;
-			    				}else if (setMove(PentagoGame.PLAYER_1, i, true)){
+			    				if(mConfirmMoves) {
+				    				if(mConfirmIndex == -1  && setMove(PentagoGame.PLAYER_1, i, false)) {
+				    					mImages[i].setImageResource(R.drawable.white_piece_selected);
+				    					mConfirmIndex = i;
+				    				} else if (i != mConfirmIndex && setMove(PentagoGame.PLAYER_1, i, false)){
+				    					mImages[mConfirmIndex].setImageResource(R.drawable.blank);
+				    					mImages[i].setImageResource(R.drawable.white_piece_selected);
+				    					mConfirmIndex = i;
+				    				}else if (setMove(PentagoGame.PLAYER_1, i, true)){
+				    					mImages[i].setImageResource(R.drawable.white_piece);
+						    			mPlacePiece = !mPlacePiece;
+						    			mConfirmIndex = -1;
+				    				}
+			    				} else if (setMove(PentagoGame.PLAYER_1, i, true)) {
 			    					mImages[i].setImageResource(R.drawable.white_piece);
-					    			mPlacePiece = !mPlacePiece;
-					    			mConfirmIndex = -1;
+			    					mPlacePiece = !mPlacePiece;
 			    				}
 			    				break;
 					    			
 		    				}
 			    			else if(!mGameOver && mTurn == PentagoGame.PLAYER_2) {
-			    				if(mConfirmIndex == -1  && setMove(PentagoGame.PLAYER_2, i, false)) {
-			    					mImages[i].setImageResource(R.drawable.black_piece_selected);
-			    					mConfirmIndex = i;
-			    				} else if (i != mConfirmIndex && setMove(PentagoGame.PLAYER_2, i, false)){
-			    					mImages[mConfirmIndex].setImageResource(R.drawable.blank);
-			    					mImages[i].setImageResource(R.drawable.black_piece_selected);
-			    					mConfirmIndex = i;
-			    				}else if (setMove(PentagoGame.PLAYER_2, i, true)){
+			    				if(mConfirmMoves) {
+				    				if(mConfirmIndex == -1  && setMove(PentagoGame.PLAYER_2, i, false)) {
+				    					mImages[i].setImageResource(R.drawable.black_piece_selected);
+				    					mConfirmIndex = i;
+				    				} else if (i != mConfirmIndex && setMove(PentagoGame.PLAYER_2, i, false)){
+				    					mImages[mConfirmIndex].setImageResource(R.drawable.blank);
+				    					mImages[i].setImageResource(R.drawable.black_piece_selected);
+				    					mConfirmIndex = i;
+				    				}else if (setMove(PentagoGame.PLAYER_2, i, true)){
+				    					mImages[i].setImageResource(R.drawable.black_piece);
+						    			mPlacePiece = !mPlacePiece;
+						    			mConfirmIndex = -1;
+				    				}
+				    			} else if (setMove(PentagoGame.PLAYER_2, i, true)) {
 			    					mImages[i].setImageResource(R.drawable.black_piece);
-					    			mPlacePiece = !mPlacePiece;
-					    			mConfirmIndex = -1;
+			    					mPlacePiece = !mPlacePiece;
 			    				}
 			    				break;
 			    			}
@@ -719,64 +731,70 @@ public class GameFragment extends Fragment {
 		    				
 		    				 if(i <= 8) {
 		    					 
-		    					 if(mConfirmIndex == -1) {
-		    						 mBoardImages[0].setImageResource(R.drawable.quadrant_selected);
-		    						 mConfirmIndex = 1;
-		    					 } else if (mConfirmIndex != 1) {
-		    						 mBoardImages[mConfirmIndex - 1].setImageResource(R.drawable.quadrant);
-		    						 mBoardImages[0].setImageResource(R.drawable.quadrant_selected);
-		    						 mConfirmIndex = 1;
-		    					 } else {
-		    						 mBoardImages[0].setImageResource(R.drawable.quadrant);
-		    						 mConfirmIndex = -1;
+		    					 if(mConfirmMoves) {
+			    					 if(mConfirmIndex == -1) {
+			    						 mBoardImages[0].setImageResource(R.drawable.quadrant_selected);
+			    						 mConfirmIndex = 1;
+			    					 } else if (mConfirmIndex != 1) {
+			    						 mBoardImages[mConfirmIndex - 1].setImageResource(R.drawable.quadrant);
+			    						 mBoardImages[0].setImageResource(R.drawable.quadrant_selected);
+			    						 mConfirmIndex = 1;
+			    					 } else {
+			    						 mBoardImages[0].setImageResource(R.drawable.quadrant);
+			    						 mConfirmIndex = -1;
+			    					 }
 		    					 }
 		    					 
 		    					 mQuadrant = 1;
 		    					 
 		    				 } else if(i <= 17) {
 		    					 
-		    					 if(mConfirmIndex == -1) {
-		    						 mBoardImages[1].setImageResource(R.drawable.quadrant_selected);
-		    						 mConfirmIndex = 2;
-		    					 } else if (mConfirmIndex != 2) {
-		    						 mBoardImages[mConfirmIndex - 1].setImageResource(R.drawable.quadrant);
-		    						 mBoardImages[1].setImageResource(R.drawable.quadrant_selected);
-		    						 mConfirmIndex = 2;
-		    					 } else {
-		    						 mBoardImages[1].setImageResource(R.drawable.quadrant);
-		    						 mConfirmIndex = -1;
+		    					 if(mConfirmMoves) {
+			    					 if(mConfirmIndex == -1) {
+			    						 mBoardImages[1].setImageResource(R.drawable.quadrant_selected);
+			    						 mConfirmIndex = 2;
+			    					 } else if (mConfirmIndex != 2) {
+			    						 mBoardImages[mConfirmIndex - 1].setImageResource(R.drawable.quadrant);
+			    						 mBoardImages[1].setImageResource(R.drawable.quadrant_selected);
+			    						 mConfirmIndex = 2;
+			    					 } else {
+			    						 mBoardImages[1].setImageResource(R.drawable.quadrant);
+			    						 mConfirmIndex = -1;
+			    					 }
 		    					 }
 		    					 
 		    					 mQuadrant = 2;
 		    					 
 		    				 } else if(i <= 26) {
-		    					 
-		    					 if(mConfirmIndex == -1) {
-		    						 mBoardImages[2].setImageResource(R.drawable.quadrant_selected);
-		    						 mConfirmIndex = 3;
-		    					 } else if (mConfirmIndex != 3) {
-		    						 mBoardImages[mConfirmIndex - 1].setImageResource(R.drawable.quadrant);
-		    						 mBoardImages[2].setImageResource(R.drawable.quadrant_selected);
-		    						 mConfirmIndex = 3;
-		    					 } else {
-		    						 mBoardImages[2].setImageResource(R.drawable.quadrant);
-		    						 mConfirmIndex = -1;
+		    					 if(mConfirmMoves) {
+			    					 if(mConfirmIndex == -1) {
+			    						 mBoardImages[2].setImageResource(R.drawable.quadrant_selected);
+			    						 mConfirmIndex = 3;
+			    					 } else if (mConfirmIndex != 3) {
+			    						 mBoardImages[mConfirmIndex - 1].setImageResource(R.drawable.quadrant);
+			    						 mBoardImages[2].setImageResource(R.drawable.quadrant_selected);
+			    						 mConfirmIndex = 3;
+			    					 } else {
+			    						 mBoardImages[2].setImageResource(R.drawable.quadrant);
+			    						 mConfirmIndex = -1;
+			    					 }
 		    					 }
 		    					 
 		    					 mQuadrant = 3;
 		    					 
 		    				 } else if(i <=35) {
-		    					 
-		    					 if(mConfirmIndex == -1) {
-		    						 mBoardImages[3].setImageResource(R.drawable.quadrant_selected);
-		    						 mConfirmIndex = 4;
-		    					 } else if (mConfirmIndex != 4) {
-		    						 mBoardImages[mConfirmIndex - 1].setImageResource(R.drawable.quadrant);
-		    						 mBoardImages[3].setImageResource(R.drawable.quadrant_selected);
-		    						 mConfirmIndex = 4;
-		    					 } else {
-		    						 mBoardImages[3].setImageResource(R.drawable.quadrant);
-		    						 mConfirmIndex = -1;
+		    					 if(mConfirmMoves) {
+			    					 if(mConfirmIndex == -1) {
+			    						 mBoardImages[3].setImageResource(R.drawable.quadrant_selected);
+			    						 mConfirmIndex = 4;
+			    					 } else if (mConfirmIndex != 4) {
+			    						 mBoardImages[mConfirmIndex - 1].setImageResource(R.drawable.quadrant);
+			    						 mBoardImages[3].setImageResource(R.drawable.quadrant_selected);
+			    						 mConfirmIndex = 4;
+			    					 } else {
+			    						 mBoardImages[3].setImageResource(R.drawable.quadrant);
+			    						 mConfirmIndex = -1;
+			    					 }
 		    					 }
 		    					 
 		    					 mQuadrant = 4;
@@ -810,11 +828,7 @@ public class GameFragment extends Fragment {
 		    		endGame(winner);
 		    	}
 	    	}
-	    	
-	    	
-	    	
-	    	// So we aren't notified of continued events when finger is moved
-		    	  	
+
     		return false;
     	}
     };
