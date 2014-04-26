@@ -622,7 +622,7 @@ public class GameFragment extends Fragment {
     			mChronometer.setBase(SystemClock.elapsedRealtime());
     			mChronometer.start();
     		}
-    		if(mTurn == mGame.PLAYER_1 || (mTurn == mGame.PLAYER_2 && mPvP))
+    		if((mTurn == mGame.PLAYER_1 || (mTurn == mGame.PLAYER_2 && mPvP)) && !mGameOver)
     		{
 	       	    int viewId = v.getId();
 	
@@ -642,6 +642,17 @@ public class GameFragment extends Fragment {
 					else {
 						mTurn = mGame.PLAYER_1;
 					}
+					
+					if (!mGameOver)
+			    	{
+				    	int winner = mGame.checkForWinner();
+				    	if (winner != 0)
+				    	{
+				    		mChronometer.stop();
+				    		endGame(winner);
+				    	}
+			    	}
+					
 					if(!mPvP && !mGameOver) {
 			    		makeComputerMove();
 			    	}
