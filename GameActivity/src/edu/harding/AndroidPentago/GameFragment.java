@@ -1,5 +1,6 @@
 package edu.harding.AndroidPentago;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -22,9 +23,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
-import android.view.ViewTreeObserver;
-import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.Chronometer;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -89,7 +87,7 @@ public class GameFragment extends Fragment {
 	private char[] mBoard;
 	
 	private boolean mPvP = true;
-		
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -98,10 +96,6 @@ public class GameFragment extends Fragment {
 		setHasOptionsMenu(true);
 		Bundle args = getArguments();
 		mPvP = args.getBoolean("PvP");
-		
-		// Retain this fragment across configuration changes
-		// This fragment is explicitly storing/restoring its own state instead.
-	    //setRetainInstance(true);
 	}
 
 	@Override

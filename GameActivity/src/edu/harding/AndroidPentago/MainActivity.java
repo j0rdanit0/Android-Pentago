@@ -1,21 +1,12 @@
 package edu.harding.AndroidPentago;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
 import edu.harding.androidtictactoe.R;
 
 public class MainActivity extends Activity {
@@ -29,26 +20,6 @@ public class MainActivity extends Activity {
 	private Button mSettings;
 	private Button mHelp;
 	private Button mRecords;
-
-	/*private final SensorEventListener mSensorListener = new SensorEventListener() {
-		public void onSensorChanged(SensorEvent se) {
-			float x = se.values[0];
-			float y = se.values[1];
-			float z = se.values[2];
-			mAccelLast = mAccelCurrent;
-			mAccelCurrent = (float) Math.sqrt((double)(x*x + y*y + z*z));
-			float delta = mAccelCurrent - mAccelLast;
-			mAccel = mAccel * .9f + delta;
-
-			if(mAccel > 2) {
-				Toast.makeText(MainActivity.this, "Shake", Toast.LENGTH_SHORT).show();
-			}
-		}
-
-		public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
-		}
-	};*/
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
