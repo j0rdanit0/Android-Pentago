@@ -33,7 +33,8 @@ import edu.harding.androidtictactoe.R;
 
 public class GameFragment extends Fragment {
 	
-	private FrameLayout[] mBoardImages = new FrameLayout[6];
+	private FrameLayout[] mQuadrants = new FrameLayout[4];
+	private ImageView[] mBoardImages = new ImageView[4];
 	
 	private int[] mViewIds = new int[4];
 	
@@ -85,6 +86,8 @@ public class GameFragment extends Fragment {
 	private String mPlayer2Name;
 	
 	private char[] mBoard;
+	
+	private int mConfirmIndex = -1;
 	
 	private boolean mPvP = true;
 	
@@ -226,10 +229,16 @@ public class GameFragment extends Fragment {
 			mGame = new PentagoGame();
 		}
 		
-		mBoardImages[0] = (FrameLayout) v.findViewById(R.id.quadrant1);
-		mBoardImages[1] = (FrameLayout) v.findViewById(R.id.quadrant2);
-		mBoardImages[2] = (FrameLayout) v.findViewById(R.id.quadrant3);
-		mBoardImages[3] = (FrameLayout) v.findViewById(R.id.quadrant4);
+		mQuadrants[0] = (FrameLayout) v.findViewById(R.id.quadrant1);
+		mQuadrants[1] = (FrameLayout) v.findViewById(R.id.quadrant2);
+		mQuadrants[2] = (FrameLayout) v.findViewById(R.id.quadrant3);
+		mQuadrants[3] = (FrameLayout) v.findViewById(R.id.quadrant4);
+		
+		mBoardImages[0] = (ImageView) v.findViewById(R.id.topLeft);
+		mBoardImages[1] = (ImageView) v.findViewById(R.id.topRight);
+		mBoardImages[2] = (ImageView) v.findViewById(R.id.bottomLeft);
+		mBoardImages[3] = (ImageView) v.findViewById(R.id.bottomRight);
+		
 	
 		int topLeft = Gravity.TOP | Gravity.LEFT;
 		int topCenter = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
@@ -271,8 +280,8 @@ public class GameFragment extends Fragment {
 		
 		for(int j = 0; j < mImages.length; j++) {
 			int index = j / 9;
-			mBoardImages[index].addView(mImages[j]);
-			mBoardImages[index].bringChildToFront(mImages[j]);
+			mQuadrants[index].addView(mImages[j]);
+			mQuadrants[index].bringChildToFront(mImages[j]);
 		}
 		
 		updateImages();
@@ -308,7 +317,7 @@ public class GameFragment extends Fragment {
         	// If it's the computer's turn, the previous turn did not take, so go again  
         	if (!mGameOver && mTurn == PentagoGame.PLAYER_2) {        		
         		int move = mGame.getComputerMove();
-        		setMove(PentagoGame.PLAYER_2, move);
+        		setMove(PentagoGame.PLAYER_2, move, true);
         	}        	
         }       
         
@@ -491,7 +500,7 @@ public class GameFragment extends Fragment {
     }*/
     
     // Make a move
-    private boolean setMove(char player, int location) {
+    private boolean setMove(char player, int location, boolean confirmed) {
     	
     	/*if (player == PentagoGame.PLAYER_2) {    		
     		// Make the computer move after a delay of 1 second
@@ -524,14 +533,14 @@ public class GameFragment extends Fragment {
     	mChronometer.start();
     	int winner = mGame.checkForWinner();
     	
-    	if(player == PentagoGame.PLAYER_2 && mGame.setMove(PentagoGame.PLAYER_2, location)) {
+    	if(player == PentagoGame.PLAYER_2 && mGame.setMove(PentagoGame.PLAYER_2, location, confirmed)) {
     		
         	//mBoardView1.invalidate(); mBoardView2.invalidate(); mBoardView3.invalidate(); mBoardView4.invalidate();   // Redraw the board
     	   	if (mSoundOn) 
     	   		mAudioPlayer.play(getActivity(), R.raw.sword);	   	
     	   	return true;
     	}
-    	else if (mGame.setMove(PentagoGame.PLAYER_1, location)) { 
+    	else if (mGame.setMove(PentagoGame.PLAYER_1, location, confirmed)) { 
     		
         	//mBoardView1.invalidate(); mBoardView2.invalidate(); mBoardView3.invalidate(); mBoardView4.invalidate();   // Redraw the board
     	   	if (mSoundOn) 
@@ -593,12 +602,16 @@ public class GameFragment extends Fragment {
     			mImages[i].setImageResource(R.drawable.blank);
     		}
     	}
+    	
+    	for(ImageView quadrant : mBoardImages) {
+    		quadrant.setImageResource(R.drawable.quadrant);
+    	}
     }
     
     private void makeComputerMove() {
     	int place = mGame.getRandomPlace();
     	
-    	setMove(PentagoGame.PLAYER_2, place);
+    	setMove(PentagoGame.PLAYER_2, place, true);
     	updateImages();
 		
 		/*try {
@@ -662,74 +675,145 @@ public class GameFragment extends Fragment {
 	       	    {
 			    	for (int i = 0; i < mImages.length; i++)
 			    	{
-			    		if (mImages[i].getId() == viewId)
+			    		if (mImages[i].getId() == viewId && mPlacePiece)
 			    		{
-			    			if(mPlacePiece) {
-				    			if(!mGameOver && mTurn == PentagoGame.PLAYER_1 &&
-				    	    			setMove(PentagoGame.PLAYER_1, i)) {
-					    			Bitmap b = BitmapFactory.decodeResource(getResources(), 
-					    					R.drawable.white_piece);
-					    			mImages[i].setImageBitmap(b);
+			    			if(!mGameOver && mTurn == PentagoGame.PLAYER_1) {
+			    				if(mConfirmIndex == -1  && setMove(PentagoGame.PLAYER_1, i, false)) {
+			    					mImages[i].setImageResource(R.drawable.white_piece_selected);
+			    					mConfirmIndex = i;
+			    				} else if (i != mConfirmIndex && setMove(PentagoGame.PLAYER_1, i, false)){
+			    					mImages[mConfirmIndex].setImageResource(R.drawable.blank);
+			    					mImages[i].setImageResource(R.drawable.white_piece_selected);
+			    					mConfirmIndex = i;
+			    				}else if (setMove(PentagoGame.PLAYER_1, i, true)){
+			    					mImages[i].setImageResource(R.drawable.white_piece);
 					    			mPlacePiece = !mPlacePiece;
-				    			}
-				    			else if(!mGameOver && mTurn == PentagoGame.PLAYER_2 &&
-				    	    			setMove(PentagoGame.PLAYER_2, i)) {
-				    				Bitmap b = BitmapFactory.decodeResource(getResources(), 
-					    					R.drawable.black_piece);
-					    			mImages[i].setImageBitmap(b);
+					    			mConfirmIndex = -1;
+			    				}
+			    				break;
+					    			
+		    				}
+			    			else if(!mGameOver && mTurn == PentagoGame.PLAYER_2) {
+			    				if(mConfirmIndex == -1 && setMove(PentagoGame.PLAYER_2, i, false)) {
+			    					mImages[i].setImageResource(R.drawable.black_piece_selected);
+			    					mConfirmIndex = i;
+			    				} else if (i != mConfirmIndex && setMove(PentagoGame.PLAYER_2, i, false)) {
+			    					mImages[mConfirmIndex].setImageResource(R.drawable.blank);
+			    					mImages[i].setImageResource(R.drawable.black_piece_selected);
+			    					mConfirmIndex = i;
+			    				} else if (setMove(PentagoGame.PLAYER_2, i, true)){
+					    			mImages[i].setImageResource(R.drawable.black_piece);
 					    			mPlacePiece = !mPlacePiece;
-				    			}
+					    			mConfirmIndex = -1;
+			    				}
+			    				break;
 			    			}
-			    			else {
-			    				
-			    				mClockwiseImage.setVisibility(View.VISIBLE);
-			    				mCounterClockwiseImage.setVisibility(View.VISIBLE);
-			    				
-			    				 if(i <= 8) {
-			    					 mQuadrant = 1;
-			    				 } else if(i <= 17) {
-			    					 mQuadrant = 2;
-			    				 } else if(i <= 26) {
-			    					 mQuadrant = 3;
-			    				 } else if(i <=35) {
-			    					 mQuadrant = 4;
-			    				 }
-			    			}
-			    		}
-			    	}
-	       	    }
-				
-		    	/*if (!mGameOver && mTurn == TicTacToeGame.HUMAN_PLAYER &&
-		    			setMove(TicTacToeGame.HUMAN_PLAYER, pos)) {        		
-	            	
-	            	// If no winner yet, let the computer make a move
-	            	int winner = mGame.checkForWinner();
-	            	if (winner == 0) { 
-	            		//updateInfoText(R.string.turn_computer); 
-	            		int move = mGame.getComputerMove();
-	            		setMove(TicTacToeGame.COMPUTER_PLAYER, move);            		
-	            	} 
-	            	else
-	            		endGame(winner);            	
-	            }*/
-		    	
-		    	if (!mGameOver)
-		    	{
-			    	int winner = mGame.checkForWinner();
-			    	if (winner != 0)
-			    	{
-			    		mChronometer.stop();
-			    		endGame(winner);
-			    	}
+		    			}
+		    			else if(mImages[i].getId() == viewId && !mPlacePiece) {
+		    				
+		    				mClockwiseImage.setVisibility(View.VISIBLE);
+		    				mCounterClockwiseImage.setVisibility(View.VISIBLE);
+		    				
+		    				 if(i <= 8) {
+		    					 
+		    					 if(mConfirmIndex == -1) {
+		    						 mBoardImages[0].setImageResource(R.drawable.quadrant_selected);
+		    						 mConfirmIndex = 1;
+		    					 } else if (mConfirmIndex != 1) {
+		    						 mBoardImages[mConfirmIndex - 1].setImageResource(R.drawable.quadrant);
+		    						 mBoardImages[0].setImageResource(R.drawable.quadrant_selected);
+		    						 mConfirmIndex = 1;
+		    					 } else {
+		    						 mBoardImages[0].setImageResource(R.drawable.quadrant);
+		    						 mConfirmIndex = -1;
+		    					 }
+		    					 
+		    					 mQuadrant = 1;
+		    					 
+		    				 } else if(i <= 17) {
+		    					 
+		    					 if(mConfirmIndex == -1) {
+		    						 mBoardImages[1].setImageResource(R.drawable.quadrant_selected);
+		    						 mConfirmIndex = 2;
+		    					 } else if (mConfirmIndex != 2) {
+		    						 mBoardImages[mConfirmIndex - 1].setImageResource(R.drawable.quadrant);
+		    						 mBoardImages[1].setImageResource(R.drawable.quadrant_selected);
+		    						 mConfirmIndex = 2;
+		    					 } else {
+		    						 mBoardImages[1].setImageResource(R.drawable.quadrant);
+		    						 mConfirmIndex = -1;
+		    					 }
+		    					 
+		    					 mQuadrant = 2;
+		    					 
+		    				 } else if(i <= 26) {
+		    					 
+		    					 if(mConfirmIndex == -1) {
+		    						 mBoardImages[2].setImageResource(R.drawable.quadrant_selected);
+		    						 mConfirmIndex = 3;
+		    					 } else if (mConfirmIndex != 3) {
+		    						 mBoardImages[mConfirmIndex - 1].setImageResource(R.drawable.quadrant);
+		    						 mBoardImages[2].setImageResource(R.drawable.quadrant_selected);
+		    						 mConfirmIndex = 3;
+		    					 } else {
+		    						 mBoardImages[2].setImageResource(R.drawable.quadrant);
+		    						 mConfirmIndex = -1;
+		    					 }
+		    					 
+		    					 mQuadrant = 3;
+		    					 
+		    				 } else if(i <=35) {
+		    					 
+		    					 if(mConfirmIndex == -1) {
+		    						 mBoardImages[3].setImageResource(R.drawable.quadrant_selected);
+		    						 mConfirmIndex = 4;
+		    					 } else if (mConfirmIndex != 4) {
+		    						 mBoardImages[mConfirmIndex - 1].setImageResource(R.drawable.quadrant);
+		    						 mBoardImages[3].setImageResource(R.drawable.quadrant_selected);
+		    						 mConfirmIndex = 4;
+		    					 } else {
+		    						 mBoardImages[3].setImageResource(R.drawable.quadrant);
+		    						 mConfirmIndex = -1;
+		    					 }
+		    					 
+		    					 mQuadrant = 4;
+		    					 
+		    				 }
+		    			}
+		    		}
 		    	}
-		    	
-		    	
-		    	
-		    	// So we aren't notified of continued events when finger is moved
-		    	  
-    		}	
+       	    }
+			
+	    	/*if (!mGameOver && mTurn == TicTacToeGame.HUMAN_PLAYER &&
+	    			setMove(TicTacToeGame.HUMAN_PLAYER, pos)) {        		
+            	
+            	// If no winner yet, let the computer make a move
+            	int winner = mGame.checkForWinner();
+            	if (winner == 0) { 
+            		//updateInfoText(R.string.turn_computer); 
+            		int move = mGame.getComputerMove();
+            		setMove(TicTacToeGame.COMPUTER_PLAYER, move);            		
+            	} 
+            	else
+            		endGame(winner);            	
+            }*/
+	    	
+	    	if (!mGameOver)
+	    	{
+		    	int winner = mGame.checkForWinner();
+		    	if (winner != 0)
+		    	{
+		    		mChronometer.stop();
+		    		endGame(winner);
+		    	}
+	    	}
+	    	
+	    	
+	    	
+	    	// So we aren't notified of continued events when finger is moved
+		    	  	
     		return false;
-        }
+    	}
     };
 	
 }

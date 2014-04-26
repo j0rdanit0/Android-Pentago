@@ -59,11 +59,13 @@ public class PentagoGame {
 	 * 
 	 * @return The true if the move was made, false otherwise.
 	 */
-	public boolean setMove(char player, int location) {
+	public boolean setMove(char player, int location, boolean confirmed) {
 		if (location >= 0 && location < BOARD_SIZE &&
 				mBoard[location] == OPEN_SPOT) {
-			mBoard[location] = player;
-			mMoves++;
+			if(confirmed) {
+				mBoard[location] = player;
+				mMoves++;
+			}
 			return true;
 		}
 		return false;

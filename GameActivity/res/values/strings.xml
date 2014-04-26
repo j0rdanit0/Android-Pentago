@@ -57,6 +57,7 @@
     <string name="music_volume">Music Volume</string>
     <string name="sfx_volume">SFX Volume</string>
     <string name="animations">Animations</string>
+    <string name="confirmMoves">Confirm Moves</string>
     
     <string name="beginning">
         The game starts with an empty game board. The game board 
