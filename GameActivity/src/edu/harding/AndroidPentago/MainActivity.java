@@ -36,6 +36,7 @@ public class MainActivity extends Activity {
 			{
 				Intent i = new Intent(MainActivity.this, GameActivity.class);
 				i.putExtra("PvP", false);
+                		i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 				startActivity(i);
 			}
 		});
@@ -49,6 +50,7 @@ public class MainActivity extends Activity {
 			{
 				Intent i = new Intent(MainActivity.this, GameActivity.class);
 				i.putExtra("PvP", true);
+                		i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 				startActivity(i);
 			}
 		});
