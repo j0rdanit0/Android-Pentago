@@ -642,6 +642,7 @@ public class GameFragment extends Fragment {
 	       	    if (viewId == R.id.clockwise || viewId == R.id.counterClockwise)
 	       	    {
 	       	    	mGame.makeRotation(mQuadrant, viewId == R.id.clockwise);
+	       	    	mConfirmIndex = -1;
 
 					mClockwiseImage.setVisibility(View.INVISIBLE);
 					mCounterClockwiseImage.setVisibility(View.INVISIBLE);
@@ -694,20 +695,22 @@ public class GameFragment extends Fragment {
 					    			
 		    				}
 			    			else if(!mGameOver && mTurn == PentagoGame.PLAYER_2) {
-			    				if(mConfirmIndex == -1 && setMove(PentagoGame.PLAYER_2, i, false)) {
+			    				if(mConfirmIndex == -1  && setMove(PentagoGame.PLAYER_2, i, false)) {
 			    					mImages[i].setImageResource(R.drawable.black_piece_selected);
 			    					mConfirmIndex = i;
-			    				} else if (i != mConfirmIndex && setMove(PentagoGame.PLAYER_2, i, false)) {
+			    				} else if (i != mConfirmIndex && setMove(PentagoGame.PLAYER_2, i, false)){
 			    					mImages[mConfirmIndex].setImageResource(R.drawable.blank);
 			    					mImages[i].setImageResource(R.drawable.black_piece_selected);
 			    					mConfirmIndex = i;
-			    				} else if (setMove(PentagoGame.PLAYER_2, i, true)){
-					    			mImages[i].setImageResource(R.drawable.black_piece);
+			    				}else if (setMove(PentagoGame.PLAYER_2, i, true)){
+			    					mImages[i].setImageResource(R.drawable.black_piece);
 					    			mPlacePiece = !mPlacePiece;
 					    			mConfirmIndex = -1;
 			    				}
 			    				break;
 			    			}
+			    			
+			    			updateImages();
 		    			}
 		    			else if(mImages[i].getId() == viewId && !mPlacePiece) {
 		    				
