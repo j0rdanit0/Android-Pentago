@@ -209,7 +209,7 @@ public class GameFragment extends Fragment {
 					mPlayer2Name = "Player 2";
 				}
 				
-				mAI = new AI(true, AI.Difficulty.Medium);
+				mAI = new AI(true, AI.Difficulty.Easy);
 				
 			}
 		}).setNegativeButton(R.string.cancel_button, 

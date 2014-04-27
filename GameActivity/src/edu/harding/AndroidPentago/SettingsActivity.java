@@ -1,17 +1,11 @@
 package edu.harding.AndroidPentago;
 
-import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.SeekBar;
 
 public class SettingsActivity extends PreferenceActivity
         implements SharedPreferences.OnSharedPreferenceChangeListener {
@@ -38,5 +32,33 @@ public class SettingsActivity extends PreferenceActivity
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
             Preference Pref = findPreference(key);
             Pref.setDefaultValue(sharedPreferences.getBoolean(key, ((CheckBoxPreference)findPreference(key)).isChecked()));
+
+            if (key.equals("musicMute"))
+            {
+                if (((CheckBoxPreference)findPreference(key)).isChecked())
+                {
+                    AudioPlayer.stopMusic();
+                }
+                else
+                {
+                    AudioPlayer.playMusic(this, R.raw.cold_funk);
+                }
+            }
+    }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        getPreferenceScreen().getSharedPreferences()
+                .registerOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    public void onPause()
+    {
+        super.onPause();
+        getPreferenceScreen().getSharedPreferences()
+                .unregisterOnSharedPreferenceChangeListener(this);
     }
 }

@@ -20,11 +20,15 @@ public class MainActivity extends Activity {
 	private Button mHelp;
 	private Button mRecords;
 
+    private Boolean mMovingWithinApp = false;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+
+        AudioPlayer.playMusic(this, R.raw.cold_funk);
 
 		mSinglePlayerButton = (Button)findViewById(R.id.single_player_button);
 		mSinglePlayerButton.setOnClickListener(new View.OnClickListener() 
@@ -36,6 +40,7 @@ public class MainActivity extends Activity {
 				Intent i = new Intent(MainActivity.this, GameActivity.class);
 				i.putExtra("PvP", false);
                 		//i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                mMovingWithinApp = true;
 				startActivity(i);
 			}
 		});
@@ -48,6 +53,7 @@ public class MainActivity extends Activity {
 			public void onClick(View v) 
 			{
 				Intent i = new Intent(MainActivity.this, GameActivity.class);
+                mMovingWithinApp = true;
 				i.putExtra("PvP", true);
                 		//i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 				startActivity(i);
@@ -62,6 +68,7 @@ public class MainActivity extends Activity {
 			public void onClick(View v) 
 			{
 				Intent i = new Intent(MainActivity.this, SettingsActivity.class);
+                mMovingWithinApp = true;
 				startActivity(i);
 			}
 		});
@@ -73,6 +80,7 @@ public class MainActivity extends Activity {
 			@Override
 			public void onClick(View v) 
 			{
+                mMovingWithinApp = true;
 				Intent i = new Intent(MainActivity.this, HelpActivity.class);
 				startActivity(i);
 			}
@@ -94,6 +102,7 @@ public class MainActivity extends Activity {
 	  protected void onResume() 
 	  {
 	    super.onResume();
+          mMovingWithinApp = false;
 	    //mSensorManager.registerListener(mSensorListener, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
 	  }
 
@@ -102,6 +111,16 @@ public class MainActivity extends Activity {
 	  {
 	    //mSensorManager.unregisterListener(mSensorListener);
 	    super.onPause();
+
+          if (!mMovingWithinApp)
+          {
+              AudioPlayer.stopMusic();
+          }
 	  }
 
+    @Override
+    protected void onStop()
+    {
+        super.onStop();
+    }
 }

@@ -6,6 +6,8 @@ import android.media.MediaPlayer;
 public class AudioPlayer {
 
 	private MediaPlayer mPlayer;
+
+    private static MediaPlayer mMusicPlayer;
 	
 	public void stop() {
 		if (mPlayer != null) {
@@ -29,4 +31,19 @@ public class AudioPlayer {
 		
 		mPlayer.start();
 	}
+
+    public static void playMusic(Context c, int musicId)
+    {
+        mMusicPlayer = MediaPlayer.create(c,musicId);
+        mMusicPlayer.setLooping(true);
+        mMusicPlayer.start();
+    }
+
+    public static void stopMusic()
+    {
+        if (mMusicPlayer != null) {
+            mMusicPlayer.release();
+            mMusicPlayer = null;
+        }
+    }
 }
