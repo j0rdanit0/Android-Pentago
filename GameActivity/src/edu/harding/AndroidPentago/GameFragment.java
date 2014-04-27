@@ -135,7 +135,7 @@ public class GameFragment extends Fragment {
 		setHasOptionsMenu(true);
 		Bundle args = getArguments();
 		mPvP = args.getBoolean("PvP");
-		mManager.get(getActivity());
+		mManager = PlayerManager.get(getActivity());
 	}
 
 	@Override
@@ -205,7 +205,6 @@ public class GameFragment extends Fragment {
 				
 				mPlayer1Name = playerName.getText().toString();
 				mPlayer2Name = "Android";
-				
 				if(mPlayer1Name.trim().equals("") || mPlayer1Name.equals(null)) {
 					mPlayer1Name = "Player 1";
 				}

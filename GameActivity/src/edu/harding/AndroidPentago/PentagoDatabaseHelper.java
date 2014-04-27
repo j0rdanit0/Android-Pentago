@@ -26,15 +26,15 @@ public class PentagoDatabaseHelper extends SQLiteOpenHelper {
 				"playerWins INTEGER NOT NULL, " +
 				"playerLosses INTEGER NOT NULL, " +
 				"playerTies INTEGER NOT NULL, " +
-				"playerTime INTEGER, " +
+				"playerTime INTEGER " +
 				");";
 		String createSql2 = "create table player_record(" +
-				"player1 TEXT NOT NULL REFERENCES players(playerName)" +
-				"player2 TEXT NOT NULL REFERENCES players(playerName)" +
-				"player1Wins INTEGER NOT NULL" +
-				"player1Losses INTEGER NOT NULL" +
-				"player1Ties INTEGER NOT NULL" +
-				"player1Time INTEGER NOT NULL" +
+				"player1 TEXT NOT NULL REFERENCES players(playerName), " +
+				"player2 TEXT NOT NULL REFERENCES players(playerName), " +
+				"player1Wins INTEGER NOT NULL, " +
+				"player1Losses INTEGER NOT NULL, " +
+				"player1Ties INTEGER NOT NULL, " +
+				"player1Time INTEGER NOT NULL, " +
 				"PRIMARY KEY(player1, player2)" +
 				");";
 				
