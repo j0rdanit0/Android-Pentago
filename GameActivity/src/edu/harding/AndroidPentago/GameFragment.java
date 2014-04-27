@@ -21,14 +21,12 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.widget.Chronometer;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.FrameLayout.LayoutParams;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -86,8 +84,8 @@ public class GameFragment extends Fragment {
 	
 	private Chronometer mChronometer;
 	
-	private AlertDialog.Builder pvpNamesDialog;
-	private AlertDialog.Builder aiNamesDialog;
+	private AlertDialog pvpNamesDialog;
+	private AlertDialog aiNamesDialog;
 	
 	private TextView mInfoTextView; 
 	private TextView mHumanScoreTextView;
@@ -129,6 +127,8 @@ public class GameFragment extends Fragment {
     private boolean mSfxOn = true;
     private boolean mAnimationsOn = true;
     private boolean mConfirmMoves = true;
+
+    private boolean mMovingWithinApp = false;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -162,9 +162,9 @@ public class GameFragment extends Fragment {
 		final View pvpNamesView = inflater.inflate(R.layout.pvp_dialog, null);
 		final View aiNameView = inflater.inflate(R.layout.ai_dialog, null);
 		
-		pvpNamesDialog = new AlertDialog.Builder(getActivity());
-		pvpNamesDialog.setView(pvpNamesView)
-			.setPositiveButton(R.string.ok_button, 
+		pvpNamesDialog = new AlertDialog.Builder(getActivity()).create();
+		pvpNamesDialog.setView(pvpNamesView);
+		pvpNamesDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK",
 					new DialogInterface.OnClickListener() {
 			
 			@Override
@@ -217,7 +217,9 @@ public class GameFragment extends Fragment {
 				mManager.addName(mPlayer1Name);
 				mManager.addName(mPlayer2Name);
 			}
-		}).setNegativeButton(R.string.cancel_button, 
+		});
+		pvpNamesDialog.setCanceledOnTouchOutside(false);
+		pvpNamesDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel", 
 				new DialogInterface.OnClickListener() {
 			
 			@Override
@@ -227,11 +229,11 @@ public class GameFragment extends Fragment {
 				startActivity(i);
 				
 			}
-		}).create();
+		});
 		
-		aiNamesDialog = new AlertDialog.Builder(getActivity());
-		aiNamesDialog.setView(aiNameView)
-			.setPositiveButton(R.string.ok_button, 
+		aiNamesDialog = new AlertDialog.Builder(getActivity()).create();
+		aiNamesDialog.setView(aiNameView);
+		aiNamesDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK", 
 					new DialogInterface.OnClickListener() {
 			
 			@Override
@@ -268,7 +270,9 @@ public class GameFragment extends Fragment {
 				mAI = new AI(true, AI.Difficulty.Easy);
 				
 			}
-		}).setNegativeButton(R.string.cancel_button, 
+		});
+		aiNamesDialog.setCanceledOnTouchOutside(false);
+		aiNamesDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel", 
 				new DialogInterface.OnClickListener() {
 			
 			@Override
@@ -278,7 +282,7 @@ public class GameFragment extends Fragment {
 				startActivity(i);
 				
 			}
-		}).create();
+		});
 
 		if(mPvP) {
 			pvpNamesDialog.show();
@@ -419,11 +423,32 @@ public class GameFragment extends Fragment {
 		outState.putChar("mGoFirst", mGoFirst);
 		outState.putChar("mTurn", mTurn);		
 	}
-	
+
+    @Override
+    public void onPause()
+    {
+        super.onPause();
+
+        if (!((GameActivity)getActivity()).mMovingWithinApp)
+        {
+            AudioPlayer.stopMusic();
+        }
+    }
+
+
+
 	@Override
 	public void onResume()
 	{
 		super.onResume();
+
+        ((GameActivity)getActivity()).mMovingWithinApp = false;
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        if(!(prefs.getBoolean("musicMute", false)))
+        {
+            AudioPlayer.playMusic(getActivity(), R.raw.cold_funk);
+        }
 		
 		loadPreferences();
 	}
@@ -436,6 +461,7 @@ public class GameFragment extends Fragment {
         	startNewGame();
             return true;
         case R.id.settings:
+            ((GameActivity)getActivity()).mMovingWithinApp = true;
             Intent i = new Intent(getActivity(), SettingsActivity.class);
             startActivity(i);
         	//startActivityForResult(new Intent(getActivity(), SettingsActivity.class), 0);
@@ -993,5 +1019,6 @@ public class GameFragment extends Fragment {
     		return false;
     	}
     };
-	
+
+
 }

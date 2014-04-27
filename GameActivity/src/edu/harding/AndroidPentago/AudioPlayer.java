@@ -34,9 +34,12 @@ public class AudioPlayer {
 
     public static void playMusic(Context c, int musicId)
     {
-        mMusicPlayer = MediaPlayer.create(c,musicId);
-        mMusicPlayer.setLooping(true);
-        mMusicPlayer.start();
+        if (mMusicPlayer == null)
+        {
+            mMusicPlayer = MediaPlayer.create(c,musicId);
+            mMusicPlayer.setLooping(true);
+            mMusicPlayer.start();
+        }
     }
 
     public static void stopMusic()

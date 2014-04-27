@@ -46,12 +46,21 @@ public class SettingsActivity extends PreferenceActivity
             }
     }
 
+    private boolean mMovingWithinApp = false;
+
     @Override
     public void onResume()
     {
         super.onResume();
         getPreferenceScreen().getSharedPreferences()
                 .registerOnSharedPreferenceChangeListener(this);
+        mMovingWithinApp = false;
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        if(!(prefs.getBoolean("musicMute", false)))
+        {
+            AudioPlayer.playMusic(this, R.raw.cold_funk);
+        }
     }
 
     @Override
@@ -60,5 +69,17 @@ public class SettingsActivity extends PreferenceActivity
         super.onPause();
         getPreferenceScreen().getSharedPreferences()
                 .unregisterOnSharedPreferenceChangeListener(this);
+
+        if(!mMovingWithinApp)
+        {
+            AudioPlayer.stopMusic();
+        }
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        mMovingWithinApp = true;
+        super.onBackPressed();
     }
 }
