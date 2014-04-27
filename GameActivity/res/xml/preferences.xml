@@ -1,39 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">                                         
-     
-                   
-	<ListPreference
-			android:key="goes_first"
-	        android:title="Who goes first"
-	        android:summary="Human"		        
-	        android:defaultValue="Alternate"
-	        android:entries="@array/list_goes_first" 
-	        android:entryValues="@array/list_goes_first" />
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 	        
 	<CheckBoxPreference
-	 		android:key="sound"
-               android:title="Sound"
-               android:defaultValue="true"
-               android:summary="Turn the sound on or off" />
+	 		android:key="musicMute"
+               android:defaultValue="false"
+               android:summary="@string/muteMusicSummary"
+               android:title="@string/muteMusic" />
 
-	<EditTextPreference
-			android:key="victory_message"	        
-	        android:summary=""
-	        android:defaultValue="@string/result_human_wins"
-	        android:title="Victory message"  />	              
-        
-    <ListPreference
-    		android:key="difficulty_level" 
-			android:title="Difficulty level"
-			android:summary=""			
-			android:defaultValue="@string/difficulty_harder"
-	    	android:entries="@array/list_difficulty_level" 
-	    	android:entryValues="@array/list_difficulty_level" />
-	    	
-	<Preference
-			android:key="board_color"
-            android:title="Board color"
-            android:summary="Set the board's color" />
+    <CheckBoxPreference
+        android:key="sfxMute"
+        android:title="SFXMute"
+        android:defaultValue="false"
+        android:summary="Turn the sound effects on or off" />
+
+    <CheckBoxPreference
+        android:key="animations"
+        android:title="Animations"
+        android:defaultValue="true"
+        android:summary="Turn animations on or off" />
+
+    <CheckBoxPreference
+        android:key="confirmMoves"
+        android:title="ConfirmMoves"
+        android:defaultValue="true"
+        android:summary="Turn move confirmation on or off" />
 		    
 		
 </PreferenceScreen>

@@ -2,6 +2,10 @@
 <resources>
     
     <string name="app_name">Pentago</string>
+    <string name="muteMusic">Mute Music</string>
+    <string name="muteSFX">Mute SFX</string>
+    <string name="muteMusicSummary">Turn the music on or off</string>
+    <string name="muteSFXSummary">Turn the sound effects on or off</string>
     
     <string name="game_settings">Settings</string>
     <string name="new_game">New Game</string>
@@ -58,6 +62,7 @@
     <string name="sfx_volume">SFX Volume</string>
     <string name="animations">Animations</string>
     <string name="confirmMoves">Confirm Moves</string>
+    <string name="sounds">Sounds</string>
     
     <string name="beginning">
         The game starts with an empty game board. The game board 
