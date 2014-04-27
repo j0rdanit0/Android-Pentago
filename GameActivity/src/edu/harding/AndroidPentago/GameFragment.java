@@ -119,6 +119,8 @@ public class GameFragment extends Fragment {
 	private int mConfirmIndex = -1;
 	
 	private boolean mPvP = true;
+	
+	private PlayerManager mManager;
 
     private boolean mMusicOn = true;
     private boolean mSfxOn = true;
@@ -133,6 +135,7 @@ public class GameFragment extends Fragment {
 		setHasOptionsMenu(true);
 		Bundle args = getArguments();
 		mPvP = args.getBoolean("PvP");
+		mManager.get(getActivity());
 	}
 
 	@Override
@@ -176,6 +179,8 @@ public class GameFragment extends Fragment {
 				if(mPlayer2Name.trim().equals("")|| player2Name.equals(null)) {
 					mPlayer2Name = "Player 2";
 				}
+				mManager.addName(mPlayer1Name);
+				mManager.addName(mPlayer2Name);
 			}
 		}).setNegativeButton(R.string.cancel_button, 
 				new DialogInterface.OnClickListener() {
@@ -208,6 +213,8 @@ public class GameFragment extends Fragment {
 				if(mPlayer2Name.trim().equals("")) {
 					mPlayer2Name = "Player 2";
 				}
+				mManager.addName(mPlayer1Name);
+				mManager.addName(mPlayer2Name);
 				
 				mAI = new AI(true, AI.Difficulty.Medium);
 				
@@ -551,12 +558,20 @@ public class GameFragment extends Fragment {
     // Game is over logic
     private void endGame(int winner) {
     	if (winner == 3) {
+    		mManager.updatePlayerTies(mPlayer1Name);
+            mManager.updatePlayerTies(mPlayer2Name);
+            mManager.updateVsTies(mPlayer1Name, mPlayer2Name);
+            mManager.updateVsTies(mPlayer2Name, mPlayer1Name);
     		mTies++;
     		Toast.makeText(getActivity(), "It's a tie!", Toast.LENGTH_LONG).show();
     		//mTieScoreTextView.setText(Integer.toString(mTies));
     		//updateInfoText(R.string.result_tie); 
     	} 
     	else if (winner == 1) {
+    		mManager.updatePlayerWins(mPlayer1Name);
+    		mManager.updatePlayerLosses(mPlayer2Name);
+    		mManager.updateVsWins(mPlayer1Name, mPlayer2Name);
+    		mManager.updateVsLosses(mPlayer2Name, mPlayer1Name);
     		mHumanWins++;
     		Toast.makeText(getActivity(), mPlayer1Name + " won!", Toast.LENGTH_LONG).show();
     		//mHumanScoreTextView.setText(Integer.toString(mHumanWins));
@@ -566,6 +581,10 @@ public class GameFragment extends Fragment {
     		mAudioPlayer.play(getActivity(), R.raw.cheer);
     	}
     	else if (winner == 2) {
+    		mManager.updatePlayerLosses(mPlayer1Name);
+    		mManager.updatePlayerWins(mPlayer2Name);
+    		mManager.updateVsLosses(mPlayer1Name, mPlayer2Name);
+    		mManager.updateVsWins(mPlayer2Name, mPlayer1Name);
     		mComputerWins++;
     		Toast.makeText(getActivity(), mPlayer2Name + " won!", Toast.LENGTH_LONG).show();
     		//mComputerScoreTextView.setText(Integer.toString(mComputerWins));
