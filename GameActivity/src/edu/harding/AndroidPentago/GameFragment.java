@@ -86,6 +86,7 @@ public class GameFragment extends Fragment {
 	
 	private AlertDialog.Builder pvpNamesDialog;
 	private AlertDialog.Builder aiNamesDialog;
+	private AlertDialog.Builder continueGameDiaglog;
 	
 	private TextView mInfoTextView; 
 	private TextView mHumanScoreTextView;
@@ -123,11 +124,77 @@ public class GameFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		if(savedInstanceState != null && savedInstanceState.getBoolean("gameOver") == false)
+		{
+			boolean continueGame = false;
+			
+			
+			//ask if they want to continue
+			DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+			    @Override
+			    public void onClick(DialogInterface dialog, int which) {
+			        switch (which){
+			        case DialogInterface.BUTTON_POSITIVE:
+			            //Yes button clicked
+			            break;
+
+			        case DialogInterface.BUTTON_NEGATIVE:
+			            //No button clicked
+			            break;
+			        }
+			    }
+			};
+
+			continueGameDiaglog = new AlertDialog.Builder(getActivity());
+			continueGameDiaglog.setMessage("There is a saved game between " + savedInstanceState.getString("Player1Name") + " and " 
+			+ savedInstanceState.getString("Player2Name") + ". Do you want to continue?").setPositiveButton("Yes", dialogClickListener)
+			    .setNegativeButton("No", dialogClickListener).show();
+			
+			
+			
+			if(continueGame == true)
+			{	
+				mPlayer1Name = savedInstanceState.getString("Player1Name");
+				mPlayer2Name = savedInstanceState.getString("Player2Name");
+				mPvP =  savedInstanceState.getBoolean("PvP");
+				mPlacePiece = savedInstanceState.getBoolean("phase");
+				mTurn = savedInstanceState.getChar("mturn");
+				mGoFirst = savedInstanceState.getChar("mGoFirst");
+				mChronometer.setBase(SystemClock.elapsedRealtime() + savedInstanceState.getLong("elapsedMillis"));
+				mGame = new PentagoGame();
+				char[] newBoard = savedInstanceState.getCharArray("board"); 
+				
+				for(int i = 0; i < 36; i++)
+				{
+					mBoard[i] = newBoard[i];
+				}
+				
+				updateImages();
+			}
+			
+			else
+			{
+				setHasOptionsMenu(true);
+				Bundle args = getArguments();
+				mPvP = args.getBoolean("PvP");
+			}
+			
+			savedInstanceState.clear();
+		}
 		
-		// Cause onCreateOptionsMenu to trigger
-		setHasOptionsMenu(true);
-		Bundle args = getArguments();
-		mPvP = args.getBoolean("PvP");
+		else
+		{
+			// Cause onCreateOptionsMenu to trigger
+			setHasOptionsMenu(true);
+			Bundle args = getArguments();
+			mPvP = args.getBoolean("PvP");
+		
+			// Retain this fragment across configuration changes
+			// This fragment is explicitly storing/restoring its own state instead.
+			//setRetainInstance(true);
+		}
+		
+		
 	}
 
 	@Override
@@ -143,7 +210,7 @@ public class GameFragment extends Fragment {
 			Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.fragment_game, container, false);
 		
-		mConfirmMoves = SettingsActivity.getConfirmMoves();
+		//mConfirmMoves = SettingsActivity.getConfirmMoves();
 		// Clear prefs for testing
 		//mPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity()); 
 		//mPrefs.edit().clear().commit();
@@ -367,17 +434,21 @@ public class GameFragment extends Fragment {
        ed.commit(); 
 	}
 	
-	
 	// Warning: This func is called when fragment is retained (setRetainInstance), 
 	// but the savedInstanceState value will always be null!
 	@Override
-	public void onSaveInstanceState(Bundle outState) {		
-		super.onSaveInstanceState(outState);		
-		outState.putCharArray("board", mGame.getBoardState());		
-		outState.putBoolean("mGameOver", mGameOver);	
-		//outState.putCharSequence("info", mInfoTextView.getText());
-		outState.putChar("mGoFirst", mGoFirst);
-		outState.putChar("mTurn", mTurn);		
+	public void onSaveInstanceState(Bundle savedInstanceState) {	
+		long elapsedMillis = SystemClock.elapsedRealtime() - mChronometer.getBase();
+		savedInstanceState.putCharArray("board", mGame.getBoardState());
+		savedInstanceState.putChar("mGoFirst", mGoFirst);
+		savedInstanceState.putChar("mTurn", mTurn);	
+		savedInstanceState.putLong("time", elapsedMillis);
+		savedInstanceState.putString("Player1Name", mPlayer1Name);
+		savedInstanceState.putString("Player2Name", mPlayer2Name);
+		savedInstanceState.putBoolean("PvP", mPvP);		
+		savedInstanceState.putBoolean("gameOver", mGameOver);
+		savedInstanceState.putBoolean("phase", mPlacePiece);
+		super.onSaveInstanceState(savedInstanceState);		
 	}
 	
 	// Handles menu item selections 
