@@ -1,5 +1,7 @@
 package edu.harding.AndroidPentago;
 
+import java.util.List;
+
 import android.content.Context;
 import edu.harding.AndroidPentago.PentagoDatabaseHelper.PlayerCursor;
 
@@ -22,7 +24,7 @@ public class PlayerManager {
 		return sPlayerManager;
 	}
 	
-	public String[] getNames() {
+	public List<String> getNames() {
 		return mHelper.getNames();
 	}
 	
@@ -31,15 +33,20 @@ public class PlayerManager {
 	}
 	
 	public PlayerRecord[] getTopTen() {
-		PlayerRecord[] records = {};
+		PlayerRecord[] records = new PlayerRecord[10];
 		PlayerCursor players = mHelper.getTopTen();
 		int count = 0;
+		players.moveToFirst();
 		while (!players.isAfterLast() && count < 10) {
 			records[count] = players.getPlayerRecord();
 			count++;
 			players.moveToNext();
 		}
 		return records;
+	}
+	
+	public PlayerRecord getSingleRecord(String player) {
+		return mHelper.getSingleRecord(player).getPlayerRecord();
 	}
 	
 	public PlayerRecord getVS(String player1, String player2) {

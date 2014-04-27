@@ -20,12 +20,15 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.widget.Chronometer;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.FrameLayout.LayoutParams;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -119,6 +122,8 @@ public class GameFragment extends Fragment {
 	private int mConfirmIndex = -1;
 	
 	private boolean mPvP = true;
+	
+	private PlayerManager mManager;
 
     private boolean mMusicOn = true;
     private boolean mSfxOn = true;
@@ -133,6 +138,7 @@ public class GameFragment extends Fragment {
 		setHasOptionsMenu(true);
 		Bundle args = getArguments();
 		mPvP = args.getBoolean("PvP");
+		mManager = PlayerManager.get(getActivity());
 	}
 
 	@Override
@@ -176,6 +182,8 @@ public class GameFragment extends Fragment {
 				if(mPlayer2Name.trim().equals("")|| player2Name.equals(null)) {
 					mPlayer2Name = "Player 2";
 				}
+				mManager.addName(mPlayer1Name);
+				mManager.addName(mPlayer2Name);
 			}
 		}).setNegativeButton(R.string.cancel_button, 
 				new DialogInterface.OnClickListener() {
@@ -200,7 +208,6 @@ public class GameFragment extends Fragment {
 				
 				mPlayer1Name = playerName.getText().toString();
 				mPlayer2Name = "Android";
-				
 				if(mPlayer1Name.trim().equals("") || mPlayer1Name.equals(null)) {
 					mPlayer1Name = "Player 1";
 				}
@@ -208,6 +215,8 @@ public class GameFragment extends Fragment {
 				if(mPlayer2Name.trim().equals("")) {
 					mPlayer2Name = "Player 2";
 				}
+				mManager.addName(mPlayer1Name);
+				mManager.addName(mPlayer2Name);
 				
 				mAI = new AI(true, AI.Difficulty.Easy);
 				
@@ -275,6 +284,22 @@ public class GameFragment extends Fragment {
 			mImages[i].setId(i);
 		}
 		
+		final ViewTreeObserver obs = mBoardImages[0].getViewTreeObserver();
+		obs.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+		    @Override
+		    public boolean onPreDraw () {
+		        int height = mBoardImages[0].getHeight() / 3;
+		        int width = mBoardImages[0].getWidth() / 3;
+		        
+		        for(int i = 0; i < mImages.length; i++) {
+		        	FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(width, height);
+		        	params.gravity = IMAGE_GRAVITY[i];
+		        }
+
+		        return true;
+		   }
+		});
+		
 		
 		for(int j = 0; j < mImages.length; j++) {
 			int index = j / 9;
@@ -321,7 +346,6 @@ public class GameFragment extends Fragment {
 		
 		return v;
 	}
-	
 	
 	
 	@Override
@@ -551,12 +575,20 @@ public class GameFragment extends Fragment {
     // Game is over logic
     private void endGame(int winner) {
     	if (winner == 3) {
+    		mManager.updatePlayerTies(mPlayer1Name);
+            mManager.updatePlayerTies(mPlayer2Name);
+            mManager.updateVsTies(mPlayer1Name, mPlayer2Name);
+            mManager.updateVsTies(mPlayer2Name, mPlayer1Name);
     		mTies++;
     		Toast.makeText(getActivity(), "It's a tie!", Toast.LENGTH_LONG).show();
     		//mTieScoreTextView.setText(Integer.toString(mTies));
     		//updateInfoText(R.string.result_tie); 
     	} 
     	else if (winner == 1) {
+    		mManager.updatePlayerWins(mPlayer1Name);
+    		mManager.updatePlayerLosses(mPlayer2Name);
+    		mManager.updateVsWins(mPlayer1Name, mPlayer2Name);
+    		mManager.updateVsLosses(mPlayer2Name, mPlayer1Name);
     		mHumanWins++;
     		Toast.makeText(getActivity(), mPlayer1Name + " won!", Toast.LENGTH_LONG).show();
     		//mHumanScoreTextView.setText(Integer.toString(mHumanWins));
@@ -566,6 +598,10 @@ public class GameFragment extends Fragment {
     		mAudioPlayer.play(getActivity(), R.raw.cheer);
     	}
     	else if (winner == 2) {
+    		mManager.updatePlayerLosses(mPlayer1Name);
+    		mManager.updatePlayerWins(mPlayer2Name);
+    		mManager.updateVsLosses(mPlayer1Name, mPlayer2Name);
+    		mManager.updateVsWins(mPlayer2Name, mPlayer1Name);
     		mComputerWins++;
     		Toast.makeText(getActivity(), mPlayer2Name + " won!", Toast.LENGTH_LONG).show();
     		//mComputerScoreTextView.setText(Integer.toString(mComputerWins));

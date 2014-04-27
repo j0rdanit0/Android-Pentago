@@ -1,0 +1,413 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TableLayout
+        android:id="@+id/topTenTable"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:shrinkColumns="*"
+        android:stretchColumns="*" >
+        
+        <TableRow
+        	android:id="@+id/titleRow"
+        	android:layout_height="wrap_content"
+        	android:layout_width="match_parent"
+        	android:gravity="center_horizontal" >
+        	
+	        <TextView
+	            android:id="@+id/titleView"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:text="Top Ten"
+	            android:gravity="center"
+	            android:textSize="30sp"
+	            android:layout_span="6"></TextView>
+	    </TableRow>
+        <TableRow
+	        android:id="@+id/headingRow"
+	        android:layout_height="wrap_content"
+	        android:layout_width="match_parent" >
+	        
+	        <TextView
+	            android:id="@+id/blankView1"
+	            android:text=""></TextView>
+	        <TextView
+	            android:id="@+id/blankView12"
+	            android:text=""></TextView>
+	        <TextView
+	            android:id="@+id/playerHeading"
+	            android:text="Player"
+	            android:textStyle="bold"
+	            android:textSize="20sp"
+	            android:typeface="serif"></TextView>
+	        <TextView
+	            android:id="@+id/winHeading"
+	            android:text="Wins"
+	            android:textStyle="bold"
+	            android:textSize="20sp"
+	            android:typeface="serif"></TextView>
+	        <TextView
+	            android:id="@+id/lossHeading"
+	            android:text="Losses"
+	            android:textStyle="bold"
+	            android:textSize="20sp"
+	            android:typeface="serif"></TextView>
+	    </TableRow>
+	    
+	    
+        <TableRow 
+            android:id="@+id/topTenRow1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+            
+            <TextView
+                android:id="@+id/blankView2"
+                android:text="" />
+            <TextView
+	            android:id="@+id/blankView13"
+	            android:text=" 1st:"
+                android:textSize="15sp"></TextView>
+            <TextView
+                android:id="@+id/firstPlaceName"
+                android:textSize="15sp"
+                android:text="" />
+            <TextView
+                android:id="@+id/firstPlaceWins"
+                android:text="" 
+                android:textSize="15sp"/>
+            <TextView 
+                android:id="@+id/firstPlaceLosses"
+                android:textSize="15sp"/>
+            
+        </TableRow>
+        <TableRow ><TextView></TextView> </TableRow>
+        <TableRow 
+            android:id="@+id/topTenRow2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+            
+            <TextView
+                android:id="@+id/blankView3"
+                android:text="" />
+            <TextView
+	            android:id="@+id/blankView14"
+	            android:text=" 2nd:"
+                android:textSize="15sp"></TextView>
+            <TextView
+                android:id="@+id/secondPlaceName"
+                android:text="" 
+                android:textSize="15sp"/>
+            <TextView
+                android:id="@+id/secondPlaceWins"
+                android:text="" 
+                android:textSize="15sp"/>
+            <TextView 
+                android:id="@+id/secondPlaceLosses"
+                android:textSize="15sp"/>
+            
+        </TableRow>
+        <TableRow ><TextView></TextView> </TableRow>
+        <TableRow 
+            android:id="@+id/topTenRow3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+            
+            <TextView
+                android:id="@+id/blankView4"
+                android:text="" />
+            <TextView
+	            android:id="@+id/blankView15"
+	            android:text=" 3rd:"
+                android:textSize="15sp"></TextView>
+            <TextView
+                android:id="@+id/thirdPlaceName"
+                android:text="" 
+                android:textSize="15sp"
+                android:layout_width="100dp"/>
+            <TextView
+                android:id="@+id/thirdPlaceWins"
+                android:text="" 
+                android:textSize="15sp"/>
+            <TextView 
+                android:id="@+id/thirdPlaceLosses"
+                android:textSize="15sp"/>
+            
+        </TableRow>
+        <TableRow ><TextView></TextView> </TableRow>
+        <TableRow 
+            android:id="@+id/topTenRow4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+            
+            <TextView
+                android:id="@+id/blankView5"
+                android:text="" />
+            <TextView
+	            android:id="@+id/blankView16"
+	            android:text=" 4th:"
+                android:textSize="15sp"></TextView>
+            <TextView
+                android:id="@+id/fourthPlaceName"
+                android:text="" 
+                android:textSize="15sp"/>
+            <TextView
+                android:id="@+id/fourthPlaceWins"
+                android:text="" 
+                android:textSize="15sp"/>
+            <TextView 
+                android:id="@+id/fourthPlaceLosses"
+                android:textSize="15sp"/>
+            
+        </TableRow>
+        <TableRow ><TextView></TextView> </TableRow>
+        <TableRow 
+            android:id="@+id/topTenRow5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+            
+            <TextView
+                android:id="@+id/blankView6"
+                android:text="" />
+            <TextView
+	            android:id="@+id/blankView17"
+	            android:text=" 5th:"
+                android:textSize="15sp"></TextView>
+            <TextView
+                android:id="@+id/fifthPlaceName"
+                android:text="" 
+                android:textSize="15sp"/>
+            <TextView
+                android:id="@+id/fifthPlaceWins"
+                android:text="" 
+                android:textSize="15sp"/>
+            <TextView 
+                android:id="@+id/fifthPlaceLosses"
+                android:textSize="15sp"/>
+            
+        </TableRow>
+        <TableRow ><TextView></TextView> </TableRow>
+        <TableRow 
+            android:id="@+id/topTenRow6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+            
+            <TextView
+                android:id="@+id/blankView7"
+                android:text="" />
+            <TextView
+	            android:id="@+id/blankView18"
+	            android:text=" 6th:"
+                android:textSize="15sp"></TextView>
+            <TextView
+                android:id="@+id/sixthPlaceName"
+                android:text="" 
+                android:textSize="15sp"/>
+            <TextView
+                android:id="@+id/sixthPlaceWins"
+                android:text="" 
+                android:textSize="15sp"/>
+            <TextView 
+                android:id="@+id/sixthPlaceLosses"
+                android:textSize="15sp"/>
+            
+        </TableRow>
+        <TableRow ><TextView></TextView> </TableRow>
+        <TableRow 
+            android:id="@+id/topTenRow7"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+            
+            <TextView
+                android:id="@+id/blankView8"
+                android:text="" />
+            <TextView
+	            android:id="@+id/blankView19"
+	            android:text=" 7th:"
+                android:textSize="15sp"></TextView>
+            <TextView
+                android:id="@+id/seventhPlaceName"
+                android:text=""
+                android:textSize="15sp" />
+            <TextView
+                android:id="@+id/seventhPlaceWins"
+                android:text=""
+                android:textSize="15sp" />
+            <TextView 
+                android:id="@+id/seventhPlaceLosses"
+                android:textSize="15sp"/>
+            
+        </TableRow>
+        <TableRow ><TextView></TextView> </TableRow>
+        <TableRow 
+            android:id="@+id/topTenRow8"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+            
+            <TextView
+                android:id="@+id/blankView9"
+                android:text="" />
+            <TextView
+	            android:id="@+id/blankView20"
+	            android:text=" 8th:"
+                android:textSize="15sp"></TextView>
+            <TextView
+                android:id="@+id/eighthPlaceName"
+                android:text="" 
+                android:textSize="15sp"/>
+            <TextView
+                android:id="@+id/eighthPlaceWins"
+                android:text=""
+                android:textSize="15sp" />
+            <TextView 
+                android:id="@+id/eighthPlaceLosses"
+                android:textSize="15sp"/>
+            
+        </TableRow>
+        <TableRow ><TextView></TextView> </TableRow>
+        <TableRow 
+            android:id="@+id/topTenRow9"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+            
+            <TextView
+                android:id="@+id/blankView10"
+                android:text="" />
+            <TextView
+	            android:id="@+id/blankView21"
+	            android:text=" 9th:"
+                android:textSize="15sp"></TextView>
+            <TextView
+                android:id="@+id/ninthPlaceName"
+                android:text=""
+                android:textSize="15sp" />
+            <TextView
+                android:id="@+id/ninthPlaceWins"
+                android:text=""
+                android:textSize="15sp" />
+            <TextView 
+                android:id="@+id/ninthPlaceLosses"
+                android:textSize="15sp"/>
+            
+        </TableRow>
+        <TableRow ><TextView></TextView> </TableRow>
+        <TableRow 
+            android:id="@+id/topTenRow10"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+            
+            <TextView
+                android:id="@+id/blankView11"
+                android:text="" />
+            <TextView
+	            android:id="@+id/blankView22"
+	            android:text="10th:"
+                android:textSize="15sp"></TextView>
+            <TextView
+                android:id="@+id/tenthPlaceName"
+                android:text=""
+                android:textSize="15sp" />
+            <TextView
+                android:id="@+id/tenthPlaceWins"
+                android:text=""
+                android:textSize="15sp" />
+            <TextView 
+                android:id="@+id/tenthPlaceLosses"
+                android:textSize="15sp"/>
+            
+        </TableRow>
+        
+    </TableLayout>
+    
+	<TextView
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	 	android:gravity="center"
+	    android:layout_marginTop="20dp"
+	    android:layout_marginBottom="20dp"
+	    android:textSize="30sp"
+	    android:text="VS Scores" />
+	
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center" >
+
+        <Spinner
+            android:id="@+id/player1Spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            />
+
+        <TextView 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:text="VS" />
+        
+        <Spinner
+            android:id="@+id/player2Spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+             />
+    </LinearLayout>
+        
+    <TableLayout
+        android:id="@+id/vsTable"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:shrinkColumns="*"
+        android:stretchColumns="*" >
+        
+        <TableRow
+        	android:id="@+id/vsRow"
+        	android:layout_height="wrap_content"
+        	android:layout_width="match_parent"
+        	android:gravity="center_horizontal" >
+                
+	        <TextView 
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_gravity="center"
+	            android:textSize="20sp"
+	            android:text=" Wins"/>
+            
+	        <TextView 
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_gravity="center"
+	            android:textSize="20sp"
+	            android:text="Losses"/>
+	    </TableRow>
+	    <TableRow
+        	android:id="@+id/vsResultsRow"
+        	android:layout_height="wrap_content"
+        	android:layout_width="match_parent"
+        	android:gravity="center_horizontal" >
+                
+	        <TextView 
+	            android:id="@+id/Wins"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_gravity="center"
+	            android:textSize="20sp"
+	            android:text="-"/>
+            
+	        <TextView 
+	            android:id="@+id/Losses"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_gravity="center"
+	            android:textSize="20sp"
+	            android:text="-"/>
+	    </TableRow>
+	    
+    </TableLayout>
+       
+    
+
+</LinearLayout>
