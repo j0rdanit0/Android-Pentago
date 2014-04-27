@@ -1,6 +1,5 @@
 package edu.harding.AndroidPentago;
 
-import edu.harding.androidtictactoe.R;
 import android.view.View;
 import android.content.Context;
 import android.graphics.Bitmap;

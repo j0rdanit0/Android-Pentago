@@ -1,6 +1,5 @@
 package edu.harding.AndroidPentago;
 
-import edu.harding.androidtictactoe.R;
 import android.app.Activity;
 import android.os.Bundle;
 

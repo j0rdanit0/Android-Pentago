@@ -29,7 +29,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import edu.harding.androidtictactoe.R;
 
 public class GameFragment extends Fragment {
 	
@@ -101,7 +100,6 @@ public class GameFragment extends Fragment {
 	private SharedPreferences mPrefs;
 	
 	private boolean mSoundOn;
-	private boolean mConfirmMoves;
 	
 	private ImageView mImages[] = new ImageView[36];
 	
@@ -120,6 +118,11 @@ public class GameFragment extends Fragment {
 	private int mConfirmIndex = -1;
 	
 	private boolean mPvP = true;
+
+    private boolean mMusicOn = true;
+    private boolean mSfxOn = true;
+    private boolean mAnimationsOn = true;
+    private boolean mConfirmMoves = true;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -341,15 +344,15 @@ public class GameFragment extends Fragment {
 		mBoardImages[2] = (ImageView) v.findViewById(R.id.bottomLeft);
 		mBoardImages[3] = (ImageView) v.findViewById(R.id.bottomRight);
 		
-		mCounterClockwiseAnim = AnimationUtils
-				.loadAnimation(getActivity(), R.anim.counter_clockwise_rotation);
-	    mCounterClockwiseAnimController = 
-	    		new LayoutAnimationController(mCounterClockwiseAnim, 0);
+		//mCounterClockwiseAnim = AnimationUtils
+		//		.loadAnimation(getActivity(), R.anim.counter_clockwise_rotation);
+	    //mCounterClockwiseAnimController =
+	    //		new LayoutAnimationController(mCounterClockwiseAnim, 0);
 	    
-	    mClockwiseAnim = AnimationUtils
-				.loadAnimation(getActivity(), R.anim.clockwise_rotation);
-	    mClockwiseAnimController = 
-	    		new LayoutAnimationController(mClockwiseAnim, 0);
+	    //mClockwiseAnim = AnimationUtils
+		//		.loadAnimation(getActivity(), R.anim.clockwise_rotation);
+	    //mClockwiseAnimController =
+	    //		new LayoutAnimationController(mClockwiseAnim, 0);
 
 		DisplayMetrics dm = new DisplayMetrics();
 		getActivity().getWindowManager().getDefaultDisplay().getMetrics(dm);
@@ -458,8 +461,10 @@ public class GameFragment extends Fragment {
         case R.id.new_game:
         	startNewGame();
             return true;
-        case R.id.settings: 
-        	startActivityForResult(new Intent(getActivity(), SettingsActivity.class), 0);     	
+        case R.id.settings:
+            Intent i = new Intent(getActivity(), SettingsActivity.class);
+            startActivity(i);
+        	//startActivityForResult(new Intent(getActivity(), SettingsActivity.class), 0);
         	return true;
        /* case R.id.reset_scores:
         	mHumanWins = 0;
@@ -486,6 +491,11 @@ public class GameFragment extends Fragment {
         mTies = mPrefs.getInt("mTies", 0);
         
     	mSoundOn = mPrefs.getBoolean(Settings.SOUND_PREFERENCE_KEY, true);
+
+        boolean mMusicOn = !(mPrefs.getBoolean("musicMute", false));
+        boolean mSfxOn = !(mPrefs.getBoolean("sfxMute", false));
+        boolean mAnimationsOn = mPrefs.getBoolean("animations", true);
+        boolean mConfirmMoves = mPrefs.getBoolean("confirmMoves", true);
     	
     	//mBoardView1.setBoardColor(mPrefs.getInt(Settings.BOARD_COLOR_PREFERENCE_KEY, Color.GRAY));
     	//mBoardView1.invalidate(); mBoardView2.invalidate(); mBoardView3.invalidate(); mBoardView4.invalidate();    // Repaint with new color
@@ -630,14 +640,14 @@ public class GameFragment extends Fragment {
     	if(player == PentagoGame.PLAYER_2 && mGame.setMove(PentagoGame.PLAYER_2, location, confirmed)) {
     		
         	//mBoardView1.invalidate(); mBoardView2.invalidate(); mBoardView3.invalidate(); mBoardView4.invalidate();   // Redraw the board
-    	   	if (mSoundOn) 
+    	   	if (mSfxOn)
     	   		mAudioPlayer.play(getActivity(), R.raw.sword);	   	
     	   	return true;
     	}
     	else if (mGame.setMove(PentagoGame.PLAYER_1, location, confirmed)) { 
     		
         	//mBoardView1.invalidate(); mBoardView2.invalidate(); mBoardView3.invalidate(); mBoardView4.invalidate();   // Redraw the board
-    	   	if (mSoundOn) 
+    	   	if (mSfxOn)
     	   		mAudioPlayer.play(getActivity(), R.raw.swish);	   	
     	   	return true;
     	}

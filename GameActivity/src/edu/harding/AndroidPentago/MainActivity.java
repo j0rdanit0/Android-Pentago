@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
-import edu.harding.androidtictactoe.R;
 
 public class MainActivity extends Activity {
 	private SensorManager mSensorManager;
@@ -36,7 +35,7 @@ public class MainActivity extends Activity {
 			{
 				Intent i = new Intent(MainActivity.this, GameActivity.class);
 				i.putExtra("PvP", false);
-                		i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                		//i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 				startActivity(i);
 			}
 		});
@@ -50,7 +49,7 @@ public class MainActivity extends Activity {
 			{
 				Intent i = new Intent(MainActivity.this, GameActivity.class);
 				i.putExtra("PvP", true);
-                		i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                		//i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 				startActivity(i);
 			}
 		});

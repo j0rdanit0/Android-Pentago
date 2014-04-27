@@ -1,7 +1,6 @@
 package edu.harding.AndroidPentago;
 
 import edu.harding.AndroidPentago.ColorPickerDialog.OnColorChangedListener;
-import edu.harding.androidtictactoe.R;
 import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.content.SharedPreferences;

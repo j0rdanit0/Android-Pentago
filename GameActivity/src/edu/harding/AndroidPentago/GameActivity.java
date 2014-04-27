@@ -1,6 +1,5 @@
 package edu.harding.AndroidPentago;
 
-import edu.harding.androidtictactoe.R;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
