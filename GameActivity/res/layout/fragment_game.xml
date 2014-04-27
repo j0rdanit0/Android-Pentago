@@ -130,13 +130,12 @@
           android:layout_weight=".2" >
 
           <ImageView
-              android:id="@+id/counterClockwise"
+              android:id="@+id/clockwise"
               android:layout_width="75dp"
               android:layout_height="match_parent"
               android:layout_gravity="left"
-              android:layout_marginRight="50dp"
               android:layout_weight="1"
-              android:src="@drawable/counter_clockwise"
+              android:src="@drawable/clockwise"
               android:visibility="invisible" />
 
           <Chronometer
@@ -151,12 +150,12 @@
               android:textSize="30sp" />
 
           <ImageView
-              android:id="@+id/clockwise"
+              android:id="@+id/counterClockwise"
               android:layout_width="75dp"
               android:layout_height="wrap_content"
               android:layout_gravity="right"
               android:layout_weight="1"
-              android:src="@drawable/clockwise"
+              android:src="@drawable/counter_clockwise"
               android:visibility="invisible" />
 
       </LinearLayout>
