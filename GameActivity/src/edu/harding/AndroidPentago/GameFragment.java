@@ -318,12 +318,6 @@ public class GameFragment extends Fragment {
         		setMove(PentagoGame.PLAYER_2, move, true);
         	}        	
         }       
-        
-        
-        
-        //updateInfoText(mInfoText);
-                
-        //displayScores();
 		
 		return v;
 	}
@@ -355,6 +349,14 @@ public class GameFragment extends Fragment {
 		outState.putChar("mTurn", mTurn);		
 	}
 	
+	@Override
+	public void onResume()
+	{
+		super.onResume();
+		
+		loadPreferences();
+	}
+	
 	// Handles menu item selections 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -367,16 +369,6 @@ public class GameFragment extends Fragment {
             startActivity(i);
         	//startActivityForResult(new Intent(getActivity(), SettingsActivity.class), 0);
         	return true;
-       /* case R.id.reset_scores:
-        	mHumanWins = 0;
-        	mComputerWins = 0;
-            mTies = 0;
-            displayScores();
-            return true;
-        case R.id.about:
-        	showDialog(DIALOG_ABOUT);
-        	return true;
-       */
         }
         return false;
     }
@@ -390,14 +382,12 @@ public class GameFragment extends Fragment {
     	mHumanWins = mPrefs.getInt("mHumanWins", 0);  
         mComputerWins = mPrefs.getInt("mComputerWins", 0);
         mTies = mPrefs.getInt("mTies", 0);
-        
-    	mSoundOn = mPrefs.getBoolean(Settings.SOUND_PREFERENCE_KEY, true);
 
-        boolean mMusicOn = !(mPrefs.getBoolean("musicMute", false));
-        boolean mSfxOn = !(mPrefs.getBoolean("sfxMute", false));
-        boolean mAnimationsOn = mPrefs.getBoolean("animations", true);
-        boolean mConfirmMoves = mPrefs.getBoolean("confirmMoves", true);
-    	
+        mMusicOn = !(mPrefs.getBoolean("musicMute", false));
+        mSfxOn = !(mPrefs.getBoolean("sfxMute", false));
+        mAnimationsOn = mPrefs.getBoolean("animations", true);
+        mConfirmMoves = mPrefs.getBoolean("confirmMoves", true);
+        
     	//mBoardView1.setBoardColor(mPrefs.getInt(Settings.BOARD_COLOR_PREFERENCE_KEY, Color.GRAY));
     	//mBoardView1.invalidate(); mBoardView2.invalidate(); mBoardView3.invalidate(); mBoardView4.invalidate();    // Repaint with new color
     	
@@ -622,39 +612,53 @@ public class GameFragment extends Fragment {
     	setMove(PentagoGame.PLAYER_2, place, true);
     	updateImages();
     	
+    	if (!mGameOver)
+    	{
+	    	int winner = mGame.checkForWinner();
+	    	if (winner != 0)
+	    	{
+	    		mChronometer.stop();
+	    		endGame(winner);
+	    	}
+    	}
     	
-		int quad = mAI.GetCuadrant();
-        	boolean cw = mAI.GetRotationDirection();
-    	
-		Handler handler = new Handler();
-		handler.postDelayed(new Runnable(){
-		@Override
-		      public void run(){
-				mQuadrant = mGame.getRandomQuadrant();
-				boolean clockwise = mGame.getRandomDirection();
-				mGame.makeRotation(mQuadrant, clockwise);
-				
-				if(clockwise) {
-       	    		mAnimHolder[mQuadrant - 1].startAnimation(mClockwiseAnim);
-       	    	} else {
-       	    		mAnimHolder[mQuadrant - 1].startAnimation(mCounterClockwiseAnim);
-       	    	}
-				
-				Handler updateHandler = new Handler();
-				updateHandler.postDelayed(new Runnable(){
-				@Override
-				      public void run(){
-						mAnimHolder[mQuadrant - 1].clearAnimation();
+    	if (!mGameOver)
+    	{
+			int quad = mAI.GetCuadrant();
+	        boolean cw = mAI.GetRotationDirection();
+	    	
+			Handler handler = new Handler();
+			handler.postDelayed(new Runnable(){
+			@Override
+			      public void run(){
+					mQuadrant = mGame.getRandomQuadrant();
+					boolean clockwise = mGame.getRandomDirection();
+					mGame.makeRotation(mQuadrant, clockwise);
+					
+					if(mAnimationsOn) {
+						if(clockwise) {
+		       	    		mAnimHolder[mQuadrant - 1].startAnimation(mClockwiseAnim);
+		       	    	} else {
+		       	    		mAnimHolder[mQuadrant - 1].startAnimation(mCounterClockwiseAnim);
+		       	    	}
+						
+						Handler updateHandler = new Handler();
+						updateHandler.postDelayed(new Runnable(){
+						@Override
+						      public void run(){
+								mAnimHolder[mQuadrant - 1].clearAnimation();
+								updateImages();
+								mTurn = mGame.PLAYER_1;
+						   }
+						}, 4000);
+					} else {
 						updateImages();
 						mTurn = mGame.PLAYER_1;
-				   }
-				}, 4000);
-				
-		   }
-		}, 2000);
-		
-		
-	
+					}
+					
+			   }
+			}, 2000);
+    	}
     }
     
     // Listen for touches on the board
@@ -675,10 +679,23 @@ public class GameFragment extends Fragment {
 	       	    	mGame.makeRotation(mQuadrant, viewId == R.id.clockwise);
 	       	    	
 	       	    	//mAnimHolder[mQuadrant - 1].bringToFront();
-	       	    	if(viewId == R.id.clockwise) {
-	       	    		mAnimHolder[mQuadrant - 1].startAnimation(mClockwiseAnim);
+	       	    	if(mAnimationsOn) {
+		       	    	if(viewId == R.id.clockwise) {
+		       	    		mAnimHolder[mQuadrant - 1].startAnimation(mClockwiseAnim);
+		       	    	} else {
+		       	    		mAnimHolder[mQuadrant - 1].startAnimation(mCounterClockwiseAnim);
+		       	    	}
+		       	    	
+		       	    	Handler handler = new Handler();
+						handler.postDelayed(new Runnable(){
+						@Override
+						      public void run(){
+								mAnimHolder[mQuadrant - 1].clearAnimation();
+								updateImages();
+						   }
+						}, 4000);
 	       	    	} else {
-	       	    		mAnimHolder[mQuadrant - 1].startAnimation(mCounterClockwiseAnim);
+	       	    		updateImages();
 	       	    	}
 	       	    	mConfirmIndex = -1;
 
@@ -693,14 +710,7 @@ public class GameFragment extends Fragment {
 			    		quadrant.setImageResource(R.drawable.quadrant);
 			    	}*/
 					
-					Handler handler = new Handler();
-					handler.postDelayed(new Runnable(){
-					@Override
-					      public void run(){
-							mAnimHolder[mQuadrant - 1].clearAnimation();
-							updateImages();
-					   }
-					}, 4000);
+					
 					
 					
 					if(mTurn == mGame.PLAYER_1) {
