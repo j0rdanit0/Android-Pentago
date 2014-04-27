@@ -630,8 +630,8 @@ public class GameFragment extends Fragment {
 		handler.postDelayed(new Runnable(){
 		@Override
 		      public void run(){
-				mQuadrant = quad;
-				boolean clockwise = quad;
+				mQuadrant = mGame.getRandomQuadrant();
+				boolean clockwise = mGame.getRandomDirection();
 				mGame.makeRotation(mQuadrant, clockwise);
 				
 				if(clockwise) {
