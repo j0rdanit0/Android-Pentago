@@ -1,5 +1,8 @@
 package edu.harding.AndroidPentago;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -18,14 +21,14 @@ public class PentagoDatabaseHelper extends SQLiteOpenHelper {
 	
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		String createSql = "create table players(" +
-				"playerName TEXT PRIMARY KEY" +
-				"playerWins INTEGER NOT NULL" +
-				"playerLosses INTEGER NOT NULL" +
-				"playerTies INTEGER NOT NULL" +
-				"playerTime INTEGER" +
-				");" +
-				"create table player_record(" +
+		String createSql1 = "create table players(" +
+				"playerName TEXT PRIMARY KEY, " +
+				"playerWins INTEGER NOT NULL, " +
+				"playerLosses INTEGER NOT NULL, " +
+				"playerTies INTEGER NOT NULL, " +
+				"playerTime INTEGER, " +
+				");";
+		String createSql2 = "create table player_record(" +
 				"player1 TEXT NOT NULL REFERENCES players(playerName)" +
 				"player2 TEXT NOT NULL REFERENCES players(playerName)" +
 				"player1Wins INTEGER NOT NULL" +
@@ -35,7 +38,8 @@ public class PentagoDatabaseHelper extends SQLiteOpenHelper {
 				"PRIMARY KEY(player1, player2)" +
 				");";
 				
-		db.execSQL(createSql);
+		db.execSQL(createSql1);
+		db.execSQL(createSql2);
 
 	}
 
@@ -45,14 +49,14 @@ public class PentagoDatabaseHelper extends SQLiteOpenHelper {
 
 	}
 	
-	public String[] getNames() {
+	public List<String> getNames() {
 		String[] args = {"playerName"};
-		String[] names = {};
+		List<String> names = new ArrayList<String>();
 		Cursor wrapped = getReadableDatabase().query("players", args, null, null, null, null, "playerName");
-		int count = 0;
+		wrapped.moveToFirst();
 		while(!wrapped.isAfterLast()){
-			names[count] = wrapped.getString(0);
-			count++;
+			names.add(wrapped.getString(0));
+			
 			wrapped.moveToNext();
 		}
 		wrapped.close();
@@ -60,19 +64,19 @@ public class PentagoDatabaseHelper extends SQLiteOpenHelper {
 	}
 	
 	public boolean addName(String name) {
-		boolean success = false;
+		boolean success = true;
 		String[] args = {"playerName"};
-		Cursor wrapped = getReadableDatabase().query("players", args, "playerName =" + name, null, null, null, null);
+		Cursor wrapped = getReadableDatabase().rawQuery("SELECT * FROM players WHERE EXISTS (SELECT * FROM players WHERE playerName = \"" + name + "\")", null);
 		if(wrapped.moveToFirst()) {
-			success = true;
+			success = false;
 		}
 		if(success == true) {
 			ContentValues values = new ContentValues();
 			values.put("playerName", name);
-			values.put("wins", 0);
-			values.put("losses", 0);
-			values.put("ties", 0);
-			values.put("time", 0);
+			values.put("PlayerWins", 0);
+			values.put("PlayerLosses", 0);
+			values.put("PlayerTies", 0);
+			values.put("PlayerTime", 0);
 			getWritableDatabase().insert("players", null, values);
 		}
 		wrapped.close();
@@ -80,40 +84,47 @@ public class PentagoDatabaseHelper extends SQLiteOpenHelper {
 	}
 	
 	public PlayerCursor getTopTen() {
-		String[] args = {"playerName", "playerWins"};
-		Cursor wrapped = getReadableDatabase().query("players", args, null, null, null, null, "playerWins");
-		wrapped.close();
+		String[] args = {"playerName", "playerWins", "playerLosses", "playerTies", "playerTime"};
+		Cursor wrapped = getReadableDatabase().query("players", args, null, null, null, null, "playerWins DESC");
 		return new PlayerCursor(wrapped);
 	}
 	
+	public PlayerCursor getSingleRecord(String player) {
+		String args[] = {"playerName", "playerWins", "playerLosses", "playerTies", "playerTime"};
+		Cursor wrapped = getReadableDatabase().query("players", args, "playerName = \"" + player + "\"", null, null, null, null);
+		wrapped.moveToFirst();
+		return new PlayerCursor(wrapped);
+	}
+	
+	
 	public PlayerCursor getVS(String player1, String player2) {
-		String[] args = {"player1Wins", "player1Losses", "player1Ties", "player1Time"};
-		Cursor wrapped = getReadableDatabase().query("player_record", args, "player1 = '" + player1 + "'" + " AND player2 = '" + player2 + "'", null, null, null, null);
-		wrapped.close();
+		String[] args = {"player1", "player1Wins", "player1Losses", "player1Ties", "player1Time"};
+		Cursor wrapped = getReadableDatabase().query("player_record", args, "player1 = \"" + player1 + "\"" + " AND player2 = \"" + player2 + "\"", null, null, null, null);
+		wrapped.moveToFirst();
 		return new PlayerCursor(wrapped);
 	}
 	
 	public void updatePlayerWins(String name) {
-		String sql = "UPDATE players SET wins = wins+1 WHERE playerName = '" + name + "'";
+		String sql = "UPDATE players SET playerWins = playerWins+1 WHERE playerName = '" + name + "'";
 		SQLiteDatabase db = getWritableDatabase();
 		db.execSQL(sql);
 		db.close();
 	}
 	
 	public void updatePlayerLosses(String name) {
-		String sql = "UPDATE players SET losses = losses+1 WHERE playerName = '" + name + "'";
+		String sql = "UPDATE players SET playerLosses = playerLosses+1 WHERE playerName = '" + name + "'";
 		SQLiteDatabase db = getWritableDatabase();
 		db.execSQL(sql);
 		db.close();	}
 	
 	public void updatePlayerTies(String name) {
-		String sql = "UPDATE players SET ties = ties+1 WHERE playerName = '" + name + "'";
+		String sql = "UPDATE players SET playerTies = playerTies+1 WHERE playerName = '" + name + "'";
 		SQLiteDatabase db = getWritableDatabase();
 		db.execSQL(sql);
 		db.close();	}
 	
 	public void updatePlayerTime(String name, int time) {
-		String sql = "UPDATE players SET time = " + time + " WHERE playerName = '" + name + "'";
+		String sql = "UPDATE players SET playerTime = " + time + " WHERE playerName = '" + name + "'";
 		SQLiteDatabase db = getWritableDatabase();
 		db.execSQL(sql);
 		db.close();	}
@@ -128,16 +139,17 @@ public class PentagoDatabaseHelper extends SQLiteOpenHelper {
 			ContentValues values = new ContentValues();
 			values.put("player1", player1);
 			values.put("player2", player2);
-			values.put("wins", 0);
-			values.put("ties", 0);
-			values.put("time", 0);
-			getWritableDatabase().insert("players", null, values);
+			values.put("player1Wins", 1);
+			values.put("player1Losses", 0);
+			values.put("player1Ties", 0);
+			values.put("player1Time", 0);
+			getWritableDatabase().insert("player_record", null, values);
 		}
 		
 		db.close();	}
 	
 	public void updateVsLosses(String player1, String player2) {
-		String sql = "UPDATE player_record SET player1losses = player1wins+1 WHERE player1 = '" + player1 + "'" + " AND player2 = '" + player2 + "'";
+		String sql = "UPDATE player_record SET player1Losses = player1Losses+1 WHERE player1 = '" + player1 + "'" + " AND player2 = '" + player2 + "'";
 		SQLiteDatabase db = getWritableDatabase();
 		Cursor c = db.query("player_record", null, "player1 = '" + player1  + "'" + " AND player2 = '" + player2 + "'", null, null, null, null, null);
 		if (c.moveToFirst()) {
@@ -146,15 +158,16 @@ public class PentagoDatabaseHelper extends SQLiteOpenHelper {
 			ContentValues values = new ContentValues();
 			values.put("player1", player1);
 			values.put("player2", player2);
-			values.put("wins", 0);
-			values.put("ties", 0);
-			values.put("time", 0);
-			getWritableDatabase().insert("players", null, values);
+			values.put("player1Wins", 0);
+			values.put("player1Losses", 1);
+			values.put("player1Ties", 0);
+			values.put("player1Time", 0);
+			getWritableDatabase().insert("player_record", null, values);
 		}
 		db.close();	}
 	
 	public void updateVsTies(String player1, String player2) {
-		String sql = "UPDATE player_record SET player1ties = player1ties+1 WHERE player1 = '" + player1 + "'" + " AND player2 = '" + player2 + "'";
+		String sql = "UPDATE player_record SET player1Ties = player1Ties+1 WHERE player1 = '" + player1 + "'" + " AND player2 = '" + player2 + "'";
 		SQLiteDatabase db = getWritableDatabase();
 		Cursor c = db.query("player_record", null, "player1 = '" + player1  + "'" + " AND player2 = '" + player2 + "'", null, null, null, null, null);
 		if (c.moveToFirst()) {
@@ -163,15 +176,16 @@ public class PentagoDatabaseHelper extends SQLiteOpenHelper {
 			ContentValues values = new ContentValues();
 			values.put("player1", player1);
 			values.put("player2", player2);
-			values.put("wins", 0);
-			values.put("ties", 0);
-			values.put("time", 0);
-			getWritableDatabase().insert("players", null, values);
+			values.put("player1Wins", 0);
+			values.put("player1Losses", 0);
+			values.put("player1Lies", 1);
+			values.put("player1Time", 0);
+			getWritableDatabase().insert("player_record", null, values);
 		}
 		db.close();	}
 	
 	public void updateVsTime(String player1, String player2, int time) {
-		String sql = "UPDATE player_record SET player1time = " + time + " WHERE player1 = '" + player1 + "'" + " AND player2 = '" + player2 + "'";
+		String sql = "UPDATE player_record SET player1Time = " + time + " WHERE player1 = '" + player1 + "'" + " AND player2 = '" + player2 + "'";
 		SQLiteDatabase db = getWritableDatabase();
 		Cursor c = db.query("player_record", null, "player1 = '" + player1  + "'" + " AND player2 = '" + player2 + "'", null, null, null, null, null);
 		if (c.moveToFirst()) {
@@ -180,10 +194,11 @@ public class PentagoDatabaseHelper extends SQLiteOpenHelper {
 			ContentValues values = new ContentValues();
 			values.put("player1", player1);
 			values.put("player2", player2);
-			values.put("wins", 0);
-			values.put("ties", 0);
-			values.put("time", 0);
-			getWritableDatabase().insert("players", null, values);
+			values.put("player1Wins", 0);
+			values.put("player1Losses", 0);
+			values.put("player1Ties", 0);
+			values.put("player1Time", time);
+			getWritableDatabase().insert("player_record", null, values);
 		}
 		db.close();	}
 	
@@ -194,10 +209,11 @@ public class PentagoDatabaseHelper extends SQLiteOpenHelper {
 		
 		public PlayerRecord getPlayerRecord() {
 			PlayerRecord record = new PlayerRecord();
-			record.wins = getInt(getColumnIndex("player1Wins"));
-			record.losses = getInt(getColumnIndex("player1Losses"));
-			record.ties = getInt(getColumnIndex("player1Ties"));
-			record.time = getInt(getColumnIndex("player1Time"));
+			record.name = getString(0);
+			record.wins = getInt(1);
+			record.losses = getInt(2);
+			record.ties = getInt(3);
+			record.time = getInt(4);
 			return record;
 		}
 	}
