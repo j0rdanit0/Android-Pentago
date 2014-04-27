@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-	        
+
+    <PreferenceCategory
+        android:key="soundsCategory"
+        android:title="Sounds">
 	<CheckBoxPreference
 	 		android:key="musicMute"
                android:defaultValue="false"
@@ -9,9 +12,14 @@
 
     <CheckBoxPreference
         android:key="sfxMute"
-        android:title="SFXMute"
+        android:title="Mute SFX"
         android:defaultValue="false"
         android:summary="Turn the sound effects on or off" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="miscCategory"
+        android:title="Miscellaneous">
 
     <CheckBoxPreference
         android:key="animations"
@@ -21,9 +29,10 @@
 
     <CheckBoxPreference
         android:key="confirmMoves"
-        android:title="ConfirmMoves"
+        android:title="Confirm Moves"
         android:defaultValue="true"
         android:summary="Turn move confirmation on or off" />
+    </PreferenceCategory>
 		    
 		
 </PreferenceScreen>
