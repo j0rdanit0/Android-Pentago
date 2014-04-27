@@ -1,13 +1,10 @@
 package edu.harding.AndroidPentago;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -23,6 +20,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.Chronometer;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -33,7 +33,29 @@ import edu.harding.androidtictactoe.R;
 
 public class GameFragment extends Fragment {
 	
+	private final int TOP_LEFT = Gravity.TOP | Gravity.LEFT;
+	private final int TOP_CENTER = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
+	private final int TOP_RIGHT = Gravity.TOP | Gravity.RIGHT;
+	
+	private final int MID_LEFT = Gravity.CENTER_VERTICAL | Gravity.LEFT;
+	private final int MID_CENTER = Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL;
+	private final int MID_RIGHT = Gravity.CENTER_VERTICAL | Gravity.RIGHT;
+	
+	private final int BOT_LEFT = Gravity.BOTTOM | Gravity.LEFT;
+	private final int BOT_CENTER = Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL;
+	private final int BOT_RIGHT = Gravity.BOTTOM | Gravity.RIGHT;
+	
+	private final int[] IMAGE_GRAVITY = {TOP_LEFT, TOP_CENTER, TOP_RIGHT, 
+			MID_LEFT, MID_CENTER, MID_RIGHT, BOT_LEFT, BOT_CENTER, BOT_RIGHT, 
+			TOP_LEFT, TOP_CENTER, TOP_RIGHT, MID_LEFT, MID_CENTER, MID_RIGHT, 
+			BOT_LEFT, BOT_CENTER, BOT_RIGHT,
+			TOP_LEFT, TOP_CENTER, TOP_RIGHT, MID_LEFT, MID_CENTER, MID_RIGHT, 
+			BOT_LEFT, BOT_CENTER, BOT_RIGHT,
+			TOP_LEFT, TOP_CENTER, TOP_RIGHT, MID_LEFT, MID_CENTER, MID_RIGHT, 
+			BOT_LEFT, BOT_CENTER, BOT_RIGHT};
+	
 	private FrameLayout[] mQuadrants = new FrameLayout[4];
+	private FrameLayout[] mAnimHolder = new FrameLayout[4];
 	private ImageView[] mBoardImages = new ImageView[4];
 	
 	private int[] mViewIds = new int[4];
@@ -51,7 +73,7 @@ public class GameFragment extends Fragment {
 	private char mGoFirst = PentagoGame.PLAYER_1;
 	
 	// Whose turn is it
-	private char mTurn = PentagoGame.PLAYER_2;    
+	private char mTurn = PentagoGame.PLAYER_2;
 	
 	private int mHumanWins = 0;
 	private int mComputerWins = 0;
@@ -87,6 +109,12 @@ public class GameFragment extends Fragment {
 	private String mPlayer2Name;
 	
 	private char[] mBoard;
+	
+	private Animation mCounterClockwiseAnim;
+    private LayoutAnimationController mCounterClockwiseAnimController;
+    
+    private Animation mClockwiseAnim;
+    private LayoutAnimationController mClockwiseAnimController;
 	
 	private int mConfirmIndex = -1;
 	
@@ -231,6 +259,11 @@ public class GameFragment extends Fragment {
 			mGame = new PentagoGame();
 		}
 		
+		mAnimHolder[0] = (FrameLayout) v.findViewById(R.id.animationHolder1);
+		mAnimHolder[1] = (FrameLayout) v.findViewById(R.id.animationHolder2);
+		mAnimHolder[2] = (FrameLayout) v.findViewById(R.id.animationHolder3);
+		mAnimHolder[3] = (FrameLayout) v.findViewById(R.id.animationHolder4);
+		
 		mQuadrants[0] = (FrameLayout) v.findViewById(R.id.quadrant1);
 		mQuadrants[1] = (FrameLayout) v.findViewById(R.id.quadrant2);
 		mQuadrants[2] = (FrameLayout) v.findViewById(R.id.quadrant3);
@@ -241,28 +274,16 @@ public class GameFragment extends Fragment {
 		mBoardImages[2] = (ImageView) v.findViewById(R.id.bottomLeft);
 		mBoardImages[3] = (ImageView) v.findViewById(R.id.bottomRight);
 		
-	
-		int topLeft = Gravity.TOP | Gravity.LEFT;
-		int topCenter = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
-		int topRight = Gravity.TOP | Gravity.RIGHT;
-		
-		int midLeft = Gravity.CENTER_VERTICAL | Gravity.LEFT;
-		int midCenter = Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL;
-		int midRight = Gravity.CENTER_VERTICAL | Gravity.RIGHT;
-		
-		int botLeft = Gravity.BOTTOM | Gravity.LEFT;
-		int botCenter = Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL;
-		int botRight = Gravity.BOTTOM | Gravity.RIGHT;
-		
-		int[] imageGravity = {topLeft, topCenter, topRight, 
-				midLeft, midCenter, midRight, botLeft, botCenter, botRight, 
-				topLeft, topCenter, topRight, midLeft, midCenter, midRight, 
-				botLeft, botCenter, botRight,
-				topLeft, topCenter, topRight, midLeft, midCenter, midRight, 
-				botLeft, botCenter, botRight,
-				topLeft, topCenter, topRight, midLeft, midCenter, midRight, 
-				botLeft, botCenter, botRight};
-		
+		mCounterClockwiseAnim = AnimationUtils
+				.loadAnimation(getActivity(), R.anim.counter_clockwise_rotation);
+	    mCounterClockwiseAnimController = 
+	    		new LayoutAnimationController(mCounterClockwiseAnim, 0);
+	    
+	    mClockwiseAnim = AnimationUtils
+				.loadAnimation(getActivity(), R.anim.clockwise_rotation);
+	    mClockwiseAnimController = 
+	    		new LayoutAnimationController(mClockwiseAnim, 0);
+
 		DisplayMetrics dm = new DisplayMetrics();
 		getActivity().getWindowManager().getDefaultDisplay().getMetrics(dm);
 		int width = dm.widthPixels / 6;
@@ -272,7 +293,7 @@ public class GameFragment extends Fragment {
 			mImages[i] = new ImageView(getActivity());
 			mImages[i].setImageResource(R.drawable.blank);
 			FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(width, width);
-			params.gravity = imageGravity[i];
+			params.gravity = IMAGE_GRAVITY[i];
 			
 			mImages[i].setLayoutParams(params);
 			mImages[i].setOnTouchListener(mTouchListener);
@@ -644,13 +665,31 @@ public class GameFragment extends Fragment {
 	       	    if (viewId == R.id.clockwise || viewId == R.id.counterClockwise)
 	       	    {
 	       	    	mGame.makeRotation(mQuadrant, viewId == R.id.clockwise);
+	       	    	
+	       	    	/*mAnimHolder[mQuadrant - 1].bringToFront();
+	       	    	if(viewId == R.id.clockwise) {
+	       	    		mAnimHolder[mQuadrant - 1].setLayoutAnimation(mClockwiseAnimController);
+	       	    	} else {
+	       	    		mAnimHolder[mQuadrant - 1].setLayoutAnimation(mCounterClockwiseAnimController);
+	       	    	}*/
+
 	       	    	mConfirmIndex = -1;
 
 					mClockwiseImage.setVisibility(View.INVISIBLE);
 					mCounterClockwiseImage.setVisibility(View.INVISIBLE);
 					
 					mPlacePiece = true;
+					
 					updateImages();
+					
+					/*Handler handler = new Handler();
+					handler.postDelayed(new Runnable(){
+					@Override
+					      public void run(){
+							updateImages();
+					   }
+					}, 3000);*/
+					
 					
 					if(mTurn == mGame.PLAYER_1) {
 						mTurn = mGame.PLAYER_2;
@@ -798,7 +837,6 @@ public class GameFragment extends Fragment {
 		    					 }
 		    					 
 		    					 mQuadrant = 4;
-		    					 
 		    				 }
 		    			}
 		    		}

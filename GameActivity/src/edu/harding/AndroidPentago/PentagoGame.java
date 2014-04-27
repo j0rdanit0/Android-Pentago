@@ -3,7 +3,7 @@ package edu.harding.AndroidPentago;
 import java.util.Random;
 
 import android.graphics.Point;
-import android.util.Log;
+import android.widget.ImageView;
 
 
 public class PentagoGame {
@@ -462,6 +462,7 @@ public class PentagoGame {
     	mBoard[topLeftPos + 2] = temp;
     	
     	temp = mBoard[topLeftPos + 1];
+    	
     	mBoard[topLeftPos + 1] = mBoard[topLeftPos + 3];
     	mBoard[topLeftPos + 3] = mBoard[topLeftPos + 7];
     	mBoard[topLeftPos + 7] = mBoard[topLeftPos + 5];
