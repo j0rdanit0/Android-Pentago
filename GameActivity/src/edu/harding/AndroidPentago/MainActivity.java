@@ -2,8 +2,10 @@ package edu.harding.AndroidPentago;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -28,7 +30,11 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-        AudioPlayer.playMusic(this, R.raw.cold_funk);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        if(!(prefs.getBoolean("musicMute", false)))
+        {
+            AudioPlayer.playMusic(this, R.raw.cold_funk);
+        }
 
 		mSinglePlayerButton = (Button)findViewById(R.id.single_player_button);
 		mSinglePlayerButton.setOnClickListener(new View.OnClickListener() 
@@ -87,16 +93,14 @@ public class MainActivity extends Activity {
 		});
 
 		mRecords = (Button)findViewById(R.id.records_button);
-		mRecords.setOnClickListener(new View.OnClickListener() 
-		{
+		mRecords.setOnClickListener(new View.OnClickListener() {
 
-			@Override
-			public void onClick(View v) 
-			{
-				Intent i = new Intent(MainActivity.this, RecordsActivity.class);
-				startActivity(i);
-			}
-		});
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, RecordsActivity.class);
+                startActivity(i);
+            }
+        });
 	}
 
 	@Override
