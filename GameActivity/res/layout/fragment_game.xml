@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -17,46 +16,54 @@
 	    android:layout_weight=".4"
 	    android:orientation="horizontal"
 	    android:weightSum="1" >
-
-	    <FrameLayout
-	        android:id="@+id/quadrant1"
+	    
+		<FrameLayout
+	        android:id="@+id/animationHolder1"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_weight=".5" >
+	        
+		    <FrameLayout
+		        android:id="@+id/quadrant1"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content" >
+		
+		        <ImageView
+		            android:id="@+id/topLeft"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:src="@drawable/quadrant"
+		            android:visibility="visible" />
 	
-	        <ImageView
-	            android:id="@+id/topLeft"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:src="@drawable/quadrant"
-	            android:visibility="visible" />
-
+		    </FrameLayout>
 	    </FrameLayout>
-	
-	    <FrameLayout
-	        android:id="@+id/quadrant2"
+	    
+		<FrameLayout
+	        android:id="@+id/animationHolder2"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:layout_marginLeft="5dp"
-	        android:layout_weight=".5"
-	        android:visibility="visible" >
+	        android:layout_weight=".5" >
+		    
+		    <FrameLayout
+		        android:id="@+id/quadrant2"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_marginLeft="5dp"
+		        android:visibility="visible" >
+		
+		        <ImageView
+		            android:id="@+id/topRight"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:src="@drawable/quadrant"
+		            android:visibility="visible" />
 	
-	        <ImageView
-	            android:id="@+id/topRight"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:src="@drawable/quadrant"
-	            android:visibility="visible" />
-
+		    </FrameLayout>
+		    
 	    </FrameLayout>
 	    
     </LinearLayout>
 
-  		<RelativeLayout
-  		    android:layout_width="wrap_content"
-  		    android:layout_height="match_parent"
-  		    android:layout_weight=".5" >
-  		</RelativeLayout>
     
   		<LinearLayout
   		    android:layout_width="match_parent"
@@ -68,32 +75,46 @@
   		    android:layout_weight=".4"
   		    android:orientation="horizontal"
   		    android:weightSum="1" >
+		
+  		<FrameLayout
+	        android:id="@+id/animationHolder3"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_weight=".5" >
 
-	    <FrameLayout
-	        android:id="@+id/quadrant3"
+		    <FrameLayout
+		        android:id="@+id/quadrant3"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content" >
+		
+		        <ImageView
+		            android:id="@+id/bottomLeft"
+		            android:layout_width="wrap_content"
+		        	android:layout_height="wrap_content"
+		            android:src="@drawable/quadrant" />
+		    </FrameLayout>
+		    
+	    </FrameLayout>
+	    
+  		<FrameLayout
+	        android:id="@+id/animationHolder4"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_weight=".5" >
 	
-	        <ImageView
-	            android:id="@+id/bottomLeft"
-	            android:layout_width="wrap_content"
-	        	android:layout_height="wrap_content"
-	            android:src="@drawable/quadrant" />
-	    </FrameLayout>
-	
-	    <FrameLayout
-	        android:id="@+id/quadrant4"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_weight=".5">
-	
-	        <ImageView
-	            android:id="@+id/bottomRight"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:layout_marginLeft="5dp"
-	            android:src="@drawable/quadrant" />
+		    <FrameLayout
+		        android:id="@+id/quadrant4"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content">
+		
+		        <ImageView
+		            android:id="@+id/bottomRight"
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:layout_marginLeft="5dp"
+		            android:src="@drawable/quadrant" />
+		        
+	        </FrameLayout>
 
 	    </FrameLayout>
 	    
