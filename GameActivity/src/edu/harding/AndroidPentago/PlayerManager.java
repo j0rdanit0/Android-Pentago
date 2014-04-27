@@ -1,5 +1,7 @@
 package edu.harding.AndroidPentago;
 
+import java.util.List;
+
 import android.content.Context;
 import edu.harding.AndroidPentago.PentagoDatabaseHelper.PlayerCursor;
 
@@ -22,7 +24,7 @@ public class PlayerManager {
 		return sPlayerManager;
 	}
 	
-	public String[] getNames() {
+	public List<String> getNames() {
 		return mHelper.getNames();
 	}
 	
