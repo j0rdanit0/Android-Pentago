@@ -85,7 +85,6 @@ public class GameFragment extends Fragment {
 	
 	private AlertDialog.Builder pvpNamesDialog;
 	private AlertDialog.Builder aiNamesDialog;
-	private AlertDialog.Builder continueGameDiaglog;
 	
 	private TextView mInfoTextView; 
 	private TextView mHumanScoreTextView;
@@ -127,77 +126,11 @@ public class GameFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		if(savedInstanceState != null && savedInstanceState.getBoolean("gameOver") == false)
-		{
-			boolean continueGame = false;
-			
-			
-			//ask if they want to continue
-			DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-			    @Override
-			    public void onClick(DialogInterface dialog, int which) {
-			        switch (which){
-			        case DialogInterface.BUTTON_POSITIVE:
-			            //Yes button clicked
-			            break;
-
-			        case DialogInterface.BUTTON_NEGATIVE:
-			            //No button clicked
-			            break;
-			        }
-			    }
-			};
-
-			continueGameDiaglog = new AlertDialog.Builder(getActivity());
-			continueGameDiaglog.setMessage("There is a saved game between " + savedInstanceState.getString("Player1Name") + " and " 
-			+ savedInstanceState.getString("Player2Name") + ". Do you want to continue?").setPositiveButton("Yes", dialogClickListener)
-			    .setNegativeButton("No", dialogClickListener).show();
-			
-			
-			
-			if(continueGame == true)
-			{	
-				mPlayer1Name = savedInstanceState.getString("Player1Name");
-				mPlayer2Name = savedInstanceState.getString("Player2Name");
-				mPvP =  savedInstanceState.getBoolean("PvP");
-				mPlacePiece = savedInstanceState.getBoolean("phase");
-				mTurn = savedInstanceState.getChar("mturn");
-				mGoFirst = savedInstanceState.getChar("mGoFirst");
-				mChronometer.setBase(SystemClock.elapsedRealtime() + savedInstanceState.getLong("elapsedMillis"));
-				mGame = new PentagoGame();
-				char[] newBoard = savedInstanceState.getCharArray("board"); 
-				
-				for(int i = 0; i < 36; i++)
-				{
-					mBoard[i] = newBoard[i];
-				}
-				
-				updateImages();
-			}
-			
-			else
-			{
-				setHasOptionsMenu(true);
-				Bundle args = getArguments();
-				mPvP = args.getBoolean("PvP");
-			}
-			
-			savedInstanceState.clear();
-		}
 		
-		else
-		{
-			// Cause onCreateOptionsMenu to trigger
-			setHasOptionsMenu(true);
-			Bundle args = getArguments();
-			mPvP = args.getBoolean("PvP");
-		
-			// Retain this fragment across configuration changes
-			// This fragment is explicitly storing/restoring its own state instead.
-			//setRetainInstance(true);
-		}
-		
-		
+		// Cause onCreateOptionsMenu to trigger
+		setHasOptionsMenu(true);
+		Bundle args = getArguments();
+		mPvP = args.getBoolean("PvP");
 	}
 
 	@Override
@@ -287,43 +220,11 @@ public class GameFragment extends Fragment {
 			}
 		}).create();
 
-	
-		
-		/*AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-		builder.setSingleChoiceItems(new CharSequence[] {"PvP", "AI"} , 0, 
-				new DialogInterface.OnClickListener() {
-			
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				if(which == 0) {
-					mPvP = true;
-				} else {
-					mPvP = false;
-				}
-				
-			}
-		}).setPositiveButton(R.string.ok_button, 
-					new DialogInterface.OnClickListener() {
-			
-			@Override
-			public void onClick(DialogInterface dialog, int which) {*/
-					if(mPvP) {
-						pvpNamesDialog.show();
-					} else {
-						aiNamesDialog.show();
-					}
-			/*}
-		}).setNegativeButton(R.string.cancel_button, 
-				new DialogInterface.OnClickListener() {
-			
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				// TODO Auto-generated method stub
-				
-			}
-		}).create();*/
-		
-		//builder.show();
+		if(mPvP) {
+			pvpNamesDialog.show();
+		} else {
+			aiNamesDialog.show();
+		}
 		
 		if (mGame == null) {
 			mGame = new PentagoGame();
@@ -344,13 +245,13 @@ public class GameFragment extends Fragment {
 		mBoardImages[2] = (ImageView) v.findViewById(R.id.bottomLeft);
 		mBoardImages[3] = (ImageView) v.findViewById(R.id.bottomRight);
 		
-		//mCounterClockwiseAnim = AnimationUtils
-		//		.loadAnimation(getActivity(), R.anim.counter_clockwise_rotation);
+		mCounterClockwiseAnim = AnimationUtils
+				.loadAnimation(getActivity(), R.anim.counter_clockwise_rotation);
 	    //mCounterClockwiseAnimController =
 	    //		new LayoutAnimationController(mCounterClockwiseAnim, 0);
 	    
-	    //mClockwiseAnim = AnimationUtils
-		//		.loadAnimation(getActivity(), R.anim.clockwise_rotation);
+	    mClockwiseAnim = AnimationUtils
+				.loadAnimation(getActivity(), R.anim.clockwise_rotation);
 	    //mClockwiseAnimController =
 	    //		new LayoutAnimationController(mClockwiseAnim, 0);
 
@@ -437,21 +338,17 @@ public class GameFragment extends Fragment {
        ed.commit(); 
 	}
 	
+	
 	// Warning: This func is called when fragment is retained (setRetainInstance), 
 	// but the savedInstanceState value will always be null!
 	@Override
-	public void onSaveInstanceState(Bundle savedInstanceState) {	
-		long elapsedMillis = SystemClock.elapsedRealtime() - mChronometer.getBase();
-		savedInstanceState.putCharArray("board", mGame.getBoardState());
-		savedInstanceState.putChar("mGoFirst", mGoFirst);
-		savedInstanceState.putChar("mTurn", mTurn);	
-		savedInstanceState.putLong("time", elapsedMillis);
-		savedInstanceState.putString("Player1Name", mPlayer1Name);
-		savedInstanceState.putString("Player2Name", mPlayer2Name);
-		savedInstanceState.putBoolean("PvP", mPvP);		
-		savedInstanceState.putBoolean("gameOver", mGameOver);
-		savedInstanceState.putBoolean("phase", mPlacePiece);
-		super.onSaveInstanceState(savedInstanceState);		
+	public void onSaveInstanceState(Bundle outState) {		
+		super.onSaveInstanceState(outState);		
+		outState.putCharArray("board", mGame.getBoardState());		
+		outState.putBoolean("mGameOver", mGameOver);	
+		//outState.putCharSequence("info", mInfoTextView.getText());
+		outState.putChar("mGoFirst", mGoFirst);
+		outState.putChar("mTurn", mTurn);		
 	}
 	
 	// Handles menu item selections 
@@ -717,16 +614,35 @@ public class GameFragment extends Fragment {
     	
     	setMove(PentagoGame.PLAYER_2, place, true);
     	updateImages();
+    	
+		Handler handler = new Handler();
+		handler.postDelayed(new Runnable(){
+		@Override
+		      public void run(){
+				mQuadrant = mGame.getRandomQuadrant();
+				boolean clockwise = mGame.getRandomDirection();
+				mGame.makeRotation(mQuadrant, clockwise);
+				
+				if(clockwise) {
+       	    		mAnimHolder[mQuadrant - 1].startAnimation(mClockwiseAnim);
+       	    	} else {
+       	    		mAnimHolder[mQuadrant - 1].startAnimation(mCounterClockwiseAnim);
+       	    	}
+				
+				Handler updateHandler = new Handler();
+				updateHandler.postDelayed(new Runnable(){
+				@Override
+				      public void run(){
+						mAnimHolder[mQuadrant - 1].clearAnimation();
+						updateImages();
+						mTurn = mGame.PLAYER_1;
+				   }
+				}, 4000);
+				
+		   }
+		}, 2000);
 		
-		/*try {
-		    Thread.sleep(1000);
-		} catch(InterruptedException ex) {
-		    Thread.currentThread().interrupt();
-		}*/
 		
-		mGame.makeRotation(mGame.getRandomQuadrant(), mGame.getRandomDirection());
-		updateImages();
-		mTurn = mGame.PLAYER_1;
 	
     }
     
@@ -747,13 +663,12 @@ public class GameFragment extends Fragment {
 	       	    {
 	       	    	mGame.makeRotation(mQuadrant, viewId == R.id.clockwise);
 	       	    	
-	       	    	/*mAnimHolder[mQuadrant - 1].bringToFront();
+	       	    	//mAnimHolder[mQuadrant - 1].bringToFront();
 	       	    	if(viewId == R.id.clockwise) {
-	       	    		mAnimHolder[mQuadrant - 1].setLayoutAnimation(mClockwiseAnimController);
+	       	    		mAnimHolder[mQuadrant - 1].startAnimation(mClockwiseAnim);
 	       	    	} else {
-	       	    		mAnimHolder[mQuadrant - 1].setLayoutAnimation(mCounterClockwiseAnimController);
-	       	    	}*/
-
+	       	    		mAnimHolder[mQuadrant - 1].startAnimation(mCounterClockwiseAnim);
+	       	    	}
 	       	    	mConfirmIndex = -1;
 
 					mClockwiseImage.setVisibility(View.INVISIBLE);
@@ -761,15 +676,20 @@ public class GameFragment extends Fragment {
 					
 					mPlacePiece = true;
 					
-					updateImages();
+					//updateImages();
 					
-					/*Handler handler = new Handler();
+			    	/*for(ImageView quadrant : mBoardImages) {
+			    		quadrant.setImageResource(R.drawable.quadrant);
+			    	}*/
+					
+					Handler handler = new Handler();
 					handler.postDelayed(new Runnable(){
 					@Override
 					      public void run(){
+							mAnimHolder[mQuadrant - 1].clearAnimation();
 							updateImages();
 					   }
-					}, 3000);*/
+					}, 4000);
 					
 					
 					if(mTurn == mGame.PLAYER_1) {
@@ -790,7 +710,14 @@ public class GameFragment extends Fragment {
 			    	}
 					
 					if(!mPvP && !mGameOver) {
-			    		makeComputerMove();
+						Handler compMoveHandler = new Handler();
+						compMoveHandler.postDelayed(new Runnable(){
+						@Override
+						      public void run(){
+							makeComputerMove();
+						   }
+						}, 6000);
+			    		
 			    	}
 	       	    }
 	       	   
