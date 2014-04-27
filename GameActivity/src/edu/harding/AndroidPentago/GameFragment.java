@@ -174,14 +174,44 @@ public class GameFragment extends Fragment {
 				
 				mPlayer1Name = player1Name.getText().toString();
 				mPlayer2Name = player2Name.getText().toString();
-				
+				String ToastText = "";
 				if(mPlayer1Name.trim().equals("") || player1Name.equals(null)) {
+					mPlayer1Name = "Player 1";
+				}
+				else if(mPlayer1Name.length() > 15) {
+					ToastText += "Names must be less that 15 characters. Default name of \"Player 1\" used. ";
+					mPlayer1Name = "Player 1";
+				}
+				else if(mPlayer1Name.equalsIgnoreCase("Everyone")) {
+					ToastText += "\"Everyone\" is a reserved name. Default name of \"Player 1\" used. ";
+					mPlayer1Name = "Player 1";
+				}
+				else if(mPlayer1Name.equalsIgnoreCase("Android")) {
+					ToastText += "\"Android\" is a reserved name. Default name of \"Player 1\" used.  ";
 					mPlayer1Name = "Player 1";
 				}
 				
 				if(mPlayer2Name.trim().equals("")|| player2Name.equals(null)) {
 					mPlayer2Name = "Player 2";
 				}
+				else if(mPlayer2Name.length() > 15) {
+					ToastText += "Names must be less than 15 characters. Default name of \"Player 2\" used.";
+					mPlayer2Name = "Player 2";
+				}
+				else if(mPlayer1Name.equalsIgnoreCase("Everyone")) {
+					ToastText += "\"Everyone\" is a reserved name. Default name of \"Player 2\" used.";
+					mPlayer2Name = "Player 2";
+				}
+				else if(mPlayer1Name.equalsIgnoreCase("Android")) {
+					ToastText += "\"Android\" is a reserved name. Default name of \"Player 2\" used.";
+					mPlayer2Name = "Player 2";
+				}
+				
+				if (mPlayer1Name.equals(mPlayer2Name)) {
+					ToastText = "Players must use separate names. Default names of \"Player 1\" and \"Player 2\" used.";
+				}
+				Toast toast = Toast.makeText(getActivity(), ToastText, Toast.LENGTH_LONG);
+				toast.show();
 				mManager.addName(mPlayer1Name);
 				mManager.addName(mPlayer2Name);
 			}
@@ -211,13 +241,28 @@ public class GameFragment extends Fragment {
 				if(mPlayer1Name.trim().equals("") || mPlayer1Name.equals(null)) {
 					mPlayer1Name = "Player 1";
 				}
-				
+				else if(mPlayer1Name.length() > 15) {
+					Toast toast = Toast.makeText(getActivity(), "Name must be less than 15 characters.  Name set to Player 1.", 1);
+					toast.show();
+					mPlayer1Name = "Player 1";
+				}
+				else if(mPlayer1Name.equalsIgnoreCase("Everyone")) {
+					Toast toast = Toast.makeText(getActivity(), "\"Everyone\" is a reserved name.  Name set to Player 1.", 1);
+					toast.show();
+					mPlayer1Name = "Player 1";
+				}
+				else if(mPlayer1Name.equalsIgnoreCase("Android")) {
+					Toast toast = Toast.makeText(getActivity(), "\"Android\" is a reserved name.  Name set to Player 1.", 1);
+					toast.show();
+					mPlayer1Name = "Player 1";
+				}
 				if(mPlayer2Name.trim().equals("")) {
+			
 					mPlayer2Name = "Player 2";
 				}
 				mManager.addName(mPlayer1Name);
 				mManager.addName(mPlayer2Name);
-				
+			
 				mAI = new AI(true, AI.Difficulty.Easy);
 				
 			}
