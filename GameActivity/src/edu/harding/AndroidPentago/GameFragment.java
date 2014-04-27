@@ -21,14 +21,12 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.widget.Chronometer;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.FrameLayout.LayoutParams;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -129,6 +127,8 @@ public class GameFragment extends Fragment {
     private boolean mSfxOn = true;
     private boolean mAnimationsOn = true;
     private boolean mConfirmMoves = true;
+
+    private boolean mMovingWithinApp = false;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -417,11 +417,32 @@ public class GameFragment extends Fragment {
 		outState.putChar("mGoFirst", mGoFirst);
 		outState.putChar("mTurn", mTurn);		
 	}
-	
+
+    @Override
+    public void onPause()
+    {
+        super.onPause();
+
+        if (!((GameActivity)getActivity()).mMovingWithinApp)
+        {
+            AudioPlayer.stopMusic();
+        }
+    }
+
+
+
 	@Override
 	public void onResume()
 	{
 		super.onResume();
+
+        ((GameActivity)getActivity()).mMovingWithinApp = false;
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        if(!(prefs.getBoolean("musicMute", false)))
+        {
+            AudioPlayer.playMusic(getActivity(), R.raw.cold_funk);
+        }
 		
 		loadPreferences();
 	}
@@ -434,6 +455,7 @@ public class GameFragment extends Fragment {
         	startNewGame();
             return true;
         case R.id.settings:
+            ((GameActivity)getActivity()).mMovingWithinApp = true;
             Intent i = new Intent(getActivity(), SettingsActivity.class);
             startActivity(i);
         	//startActivityForResult(new Intent(getActivity(), SettingsActivity.class), 0);
@@ -980,5 +1002,6 @@ public class GameFragment extends Fragment {
     		return false;
     	}
     };
-	
+
+
 }

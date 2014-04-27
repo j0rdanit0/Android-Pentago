@@ -1,10 +1,9 @@
 package edu.harding.AndroidPentago;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -12,12 +11,16 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class RecordsActivity extends Activity implements OnItemSelectedListener {
 	private PlayerManager mManager;
 	private Spinner spinner1;
 	private Spinner spinner2;
 	private TextView wins;
 	private TextView losses;
+    private boolean mMovingWithinApp = false;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -229,4 +232,37 @@ public class RecordsActivity extends Activity implements OnItemSelectedListener 
 		// TODO Auto-generated method stub
 		
 	}
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        mMovingWithinApp = false;
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        if(!(prefs.getBoolean("musicMute", false)))
+        {
+            AudioPlayer.playMusic(this, R.raw.cold_funk);
+        }
+        //mSensorManager.registerListener(mSensorListener, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
+    }
+
+    @Override
+    protected void onPause()
+    {
+        //mSensorManager.unregisterListener(mSensorListener);
+        super.onPause();
+
+        if (!mMovingWithinApp)
+        {
+            AudioPlayer.stopMusic();
+        }
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        mMovingWithinApp = true;
+        super.onBackPressed();
+    }
 }

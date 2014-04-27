@@ -97,6 +97,7 @@ public class MainActivity extends Activity {
 
             @Override
             public void onClick(View v) {
+                mMovingWithinApp = true;
                 Intent i = new Intent(MainActivity.this, RecordsActivity.class);
                 startActivity(i);
             }
@@ -116,6 +117,12 @@ public class MainActivity extends Activity {
 	  {
 	    super.onResume();
           mMovingWithinApp = false;
+
+          SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+          if(!(prefs.getBoolean("musicMute", false)))
+          {
+              AudioPlayer.playMusic(this, R.raw.cold_funk);
+          }
 	    //mSensorManager.registerListener(mSensorListener, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
 	  }
 

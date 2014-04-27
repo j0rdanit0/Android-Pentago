@@ -9,6 +9,8 @@ import android.util.Log;
 public class GameActivity extends FragmentActivity {
 
 	private final String LOGTAG = "TTT";
+
+    public boolean mMovingWithinApp = false;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -33,5 +35,11 @@ public class GameActivity extends FragmentActivity {
 		}
 	}
 
+    @Override
+    public void onBackPressed()
+    {
+        mMovingWithinApp = true;
+        super.onBackPressed();
+    }
 
 }
