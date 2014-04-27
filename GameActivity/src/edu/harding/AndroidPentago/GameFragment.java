@@ -84,8 +84,8 @@ public class GameFragment extends Fragment {
 	
 	private Chronometer mChronometer;
 	
-	private AlertDialog.Builder pvpNamesDialog;
-	private AlertDialog.Builder aiNamesDialog;
+	private AlertDialog pvpNamesDialog;
+	private AlertDialog aiNamesDialog;
 	
 	private TextView mInfoTextView; 
 	private TextView mHumanScoreTextView;
@@ -162,9 +162,9 @@ public class GameFragment extends Fragment {
 		final View pvpNamesView = inflater.inflate(R.layout.pvp_dialog, null);
 		final View aiNameView = inflater.inflate(R.layout.ai_dialog, null);
 		
-		pvpNamesDialog = new AlertDialog.Builder(getActivity());
-		pvpNamesDialog.setView(pvpNamesView)
-			.setPositiveButton(R.string.ok_button, 
+		pvpNamesDialog = new AlertDialog.Builder(getActivity()).create();
+		pvpNamesDialog.setView(pvpNamesView);
+		pvpNamesDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK",
 					new DialogInterface.OnClickListener() {
 			
 			@Override
@@ -198,11 +198,11 @@ public class GameFragment extends Fragment {
 					ToastText += "Names must be less than 15 characters. Default name of \"Player 2\" used.";
 					mPlayer2Name = "Player 2";
 				}
-				else if(mPlayer1Name.equalsIgnoreCase("Everyone")) {
+				else if(mPlayer2Name.equalsIgnoreCase("Everyone")) {
 					ToastText += "\"Everyone\" is a reserved name. Default name of \"Player 2\" used.";
 					mPlayer2Name = "Player 2";
 				}
-				else if(mPlayer1Name.equalsIgnoreCase("Android")) {
+				else if(mPlayer2Name.equalsIgnoreCase("Android")) {
 					ToastText += "\"Android\" is a reserved name. Default name of \"Player 2\" used.";
 					mPlayer2Name = "Player 2";
 				}
@@ -210,12 +210,16 @@ public class GameFragment extends Fragment {
 				if (mPlayer1Name.equals(mPlayer2Name)) {
 					ToastText = "Players must use separate names. Default names of \"Player 1\" and \"Player 2\" used.";
 				}
-				Toast toast = Toast.makeText(getActivity(), ToastText, Toast.LENGTH_LONG);
-				toast.show();
+				if (!ToastText.equals("")) {
+					Toast toast = Toast.makeText(getActivity(), ToastText, Toast.LENGTH_LONG);
+					toast.show();
+				}
 				mManager.addName(mPlayer1Name);
 				mManager.addName(mPlayer2Name);
 			}
-		}).setNegativeButton(R.string.cancel_button, 
+		});
+		pvpNamesDialog.setCanceledOnTouchOutside(false);
+		pvpNamesDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel", 
 				new DialogInterface.OnClickListener() {
 			
 			@Override
@@ -225,11 +229,11 @@ public class GameFragment extends Fragment {
 				startActivity(i);
 				
 			}
-		}).create();
+		});
 		
-		aiNamesDialog = new AlertDialog.Builder(getActivity());
-		aiNamesDialog.setView(aiNameView)
-			.setPositiveButton(R.string.ok_button, 
+		aiNamesDialog = new AlertDialog.Builder(getActivity()).create();
+		aiNamesDialog.setView(aiNameView);
+		aiNamesDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK", 
 					new DialogInterface.OnClickListener() {
 			
 			@Override
@@ -266,7 +270,9 @@ public class GameFragment extends Fragment {
 				mAI = new AI(true, AI.Difficulty.Easy);
 				
 			}
-		}).setNegativeButton(R.string.cancel_button, 
+		});
+		aiNamesDialog.setCanceledOnTouchOutside(false);
+		aiNamesDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel", 
 				new DialogInterface.OnClickListener() {
 			
 			@Override
@@ -276,7 +282,7 @@ public class GameFragment extends Fragment {
 				startActivity(i);
 				
 			}
-		}).create();
+		});
 
 		if(mPvP) {
 			pvpNamesDialog.show();
@@ -549,11 +555,22 @@ public class GameFragment extends Fragment {
         		mTurn = PentagoGame.PLAYER_2;  
         		if (mPvP == false) {
         			makeComputerMove();
+        			if (mPlayer1Name != null && mPlayer2Name != null) {
+        				Toast.makeText(getActivity(), "Android will go first", Toast.LENGTH_LONG).show();
+        			}
+        		}
+        		else {
+        			if (mPlayer1Name != null && mPlayer2Name != null) {
+        				Toast.makeText(getActivity(), mPlayer2Name + " will go first", Toast.LENGTH_LONG).show();
+        			}
         		}
         	}
         	else {
         		mGoFirst = PentagoGame.PLAYER_2;
         		mTurn = PentagoGame.PLAYER_1;
+        		if (mPlayer1Name != null && mPlayer2Name != null) {
+        			Toast.makeText(getActivity(), mPlayer1Name + " will go first", Toast.LENGTH_LONG).show();
+        		}
         	}	
     	}
     	/*else if (goesFirst.equals(getResources().getString(R.string.goes_first_human))) 
