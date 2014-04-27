@@ -123,8 +123,6 @@ public class GameFragment extends Fragment {
     private boolean mSfxOn = true;
     private boolean mAnimationsOn = true;
     private boolean mConfirmMoves = true;
-
-    private AI mAI;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -275,8 +273,6 @@ public class GameFragment extends Fragment {
 				if(mPlayer2Name.trim().equals("")) {
 					mPlayer2Name = "Player 2";
 				}
-
-                mAI = new AI(true, AI.Difficulty.Medium);
 				
 			}
 		}).setNegativeButton(R.string.cancel_button, 
@@ -718,8 +714,7 @@ public class GameFragment extends Fragment {
     
     private void makeComputerMove() {
     	int place = mGame.getRandomPlace();
-    	mAI.MakeAIMove(mBoard);
-        place = mAI.GetMoveChoice();
+    	
     	setMove(PentagoGame.PLAYER_2, place, true);
     	updateImages();
 		
@@ -729,8 +724,7 @@ public class GameFragment extends Fragment {
 		    Thread.currentThread().interrupt();
 		}*/
 		
-		//mGame.makeRotation(mGame.getRandomQuadrant(), mGame.getRandomDirection());
-        mGame.makeRotation(mAI.GetCuadrant(), mAI.GetRotationDirection());
+		mGame.makeRotation(mGame.getRandomQuadrant(), mGame.getRandomDirection());
 		updateImages();
 		mTurn = mGame.PLAYER_1;
 	
