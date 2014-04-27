@@ -86,8 +86,8 @@ public class GameFragment extends Fragment {
 	
 	private Chronometer mChronometer;
 	
-	private AlertDialog.Builder pvpNamesDialog;
-	private AlertDialog.Builder aiNamesDialog;
+	private AlertDialog pvpNamesDialog;
+	private AlertDialog aiNamesDialog;
 	
 	private TextView mInfoTextView; 
 	private TextView mHumanScoreTextView;
@@ -162,9 +162,9 @@ public class GameFragment extends Fragment {
 		final View pvpNamesView = inflater.inflate(R.layout.pvp_dialog, null);
 		final View aiNameView = inflater.inflate(R.layout.ai_dialog, null);
 		
-		pvpNamesDialog = new AlertDialog.Builder(getActivity());
-		pvpNamesDialog.setView(pvpNamesView)
-			.setPositiveButton(R.string.ok_button, 
+		pvpNamesDialog = new AlertDialog.Builder(getActivity()).create();
+		pvpNamesDialog.setView(pvpNamesView);
+		pvpNamesDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK",
 					new DialogInterface.OnClickListener() {
 			
 			@Override
@@ -217,7 +217,9 @@ public class GameFragment extends Fragment {
 				mManager.addName(mPlayer1Name);
 				mManager.addName(mPlayer2Name);
 			}
-		}).setNegativeButton(R.string.cancel_button, 
+		});
+		pvpNamesDialog.setCanceledOnTouchOutside(false);
+		pvpNamesDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel", 
 				new DialogInterface.OnClickListener() {
 			
 			@Override
@@ -227,11 +229,11 @@ public class GameFragment extends Fragment {
 				startActivity(i);
 				
 			}
-		}).create();
+		});
 		
-		aiNamesDialog = new AlertDialog.Builder(getActivity());
-		aiNamesDialog.setView(aiNameView)
-			.setPositiveButton(R.string.ok_button, 
+		aiNamesDialog = new AlertDialog.Builder(getActivity()).create();
+		aiNamesDialog.setView(aiNameView);
+		aiNamesDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK", 
 					new DialogInterface.OnClickListener() {
 			
 			@Override
@@ -268,7 +270,9 @@ public class GameFragment extends Fragment {
 				mAI = new AI(true, AI.Difficulty.Easy);
 				
 			}
-		}).setNegativeButton(R.string.cancel_button, 
+		});
+		aiNamesDialog.setCanceledOnTouchOutside(false);
+		aiNamesDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel", 
 				new DialogInterface.OnClickListener() {
 			
 			@Override
@@ -278,7 +282,7 @@ public class GameFragment extends Fragment {
 				startActivity(i);
 				
 			}
-		}).create();
+		});
 
 		if(mPvP) {
 			pvpNamesDialog.show();
