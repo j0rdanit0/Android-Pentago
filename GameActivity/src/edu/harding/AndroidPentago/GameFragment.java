@@ -198,11 +198,11 @@ public class GameFragment extends Fragment {
 					ToastText += "Names must be less than 15 characters. Default name of \"Player 2\" used.";
 					mPlayer2Name = "Player 2";
 				}
-				else if(mPlayer1Name.equalsIgnoreCase("Everyone")) {
+				else if(mPlayer2Name.equalsIgnoreCase("Everyone")) {
 					ToastText += "\"Everyone\" is a reserved name. Default name of \"Player 2\" used.";
 					mPlayer2Name = "Player 2";
 				}
-				else if(mPlayer1Name.equalsIgnoreCase("Android")) {
+				else if(mPlayer2Name.equalsIgnoreCase("Android")) {
 					ToastText += "\"Android\" is a reserved name. Default name of \"Player 2\" used.";
 					mPlayer2Name = "Player 2";
 				}
@@ -210,8 +210,10 @@ public class GameFragment extends Fragment {
 				if (mPlayer1Name.equals(mPlayer2Name)) {
 					ToastText = "Players must use separate names. Default names of \"Player 1\" and \"Player 2\" used.";
 				}
-				Toast toast = Toast.makeText(getActivity(), ToastText, Toast.LENGTH_LONG);
-				toast.show();
+				if (!ToastText.equals("")) {
+					Toast toast = Toast.makeText(getActivity(), ToastText, Toast.LENGTH_LONG);
+					toast.show();
+				}
 				mManager.addName(mPlayer1Name);
 				mManager.addName(mPlayer2Name);
 			}
@@ -527,11 +529,22 @@ public class GameFragment extends Fragment {
         		mTurn = PentagoGame.PLAYER_2;  
         		if (mPvP == false) {
         			makeComputerMove();
+        			if (mPlayer1Name != null && mPlayer2Name != null) {
+        				Toast.makeText(getActivity(), "Android will go first", Toast.LENGTH_LONG).show();
+        			}
+        		}
+        		else {
+        			if (mPlayer1Name != null && mPlayer2Name != null) {
+        				Toast.makeText(getActivity(), mPlayer2Name + " will go first", Toast.LENGTH_LONG).show();
+        			}
         		}
         	}
         	else {
         		mGoFirst = PentagoGame.PLAYER_2;
         		mTurn = PentagoGame.PLAYER_1;
+        		if (mPlayer1Name != null && mPlayer2Name != null) {
+        			Toast.makeText(getActivity(), mPlayer1Name + " will go first", Toast.LENGTH_LONG).show();
+        		}
         	}	
     	}
     	/*else if (goesFirst.equals(getResources().getString(R.string.goes_first_human))) 
