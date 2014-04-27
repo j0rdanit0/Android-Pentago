@@ -20,12 +20,15 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.widget.Chronometer;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.FrameLayout.LayoutParams;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -281,6 +284,22 @@ public class GameFragment extends Fragment {
 			mImages[i].setId(i);
 		}
 		
+		final ViewTreeObserver obs = mBoardImages[0].getViewTreeObserver();
+		obs.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+		    @Override
+		    public boolean onPreDraw () {
+		        int height = mBoardImages[0].getHeight() / 3;
+		        int width = mBoardImages[0].getWidth() / 3;
+		        
+		        for(int i = 0; i < mImages.length; i++) {
+		        	FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(width, height);
+		        	params.gravity = IMAGE_GRAVITY[i];
+		        }
+
+		        return true;
+		   }
+		});
+		
 		
 		for(int j = 0; j < mImages.length; j++) {
 			int index = j / 9;
@@ -327,7 +346,6 @@ public class GameFragment extends Fragment {
 		
 		return v;
 	}
-	
 	
 	
 	@Override
