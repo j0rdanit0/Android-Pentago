@@ -79,7 +79,16 @@ public class MainActivity extends Activity {
 		});
 
 		mRecords = (Button)findViewById(R.id.records_button);
-		mRecords.setEnabled(false);
+		mRecords.setOnClickListener(new View.OnClickListener() 
+		{
+
+			@Override
+			public void onClick(View v) 
+			{
+				Intent i = new Intent(MainActivity.this, RecordsActivity.class);
+				startActivity(i);
+			}
+		});
 	}
 
 	@Override
