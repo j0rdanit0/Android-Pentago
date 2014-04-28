@@ -2,6 +2,7 @@ package edu.harding.AndroidPentago;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,6 +11,7 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -32,6 +34,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class GameFragment extends Fragment {
+	
+
+	boolean continueGame;
+	Intent intent;
+	FragmentActivity a;
 	
 	private final int TOP_LEFT = Gravity.TOP | Gravity.LEFT;
 	private final int TOP_CENTER = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
@@ -133,6 +140,17 @@ public class GameFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		a  = this.getActivity();
+		intent = a.getIntent();
+		
+		
+		
+		if (mPrefs == null)
+    		mPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+		String CurrentString = mPrefs.getString("saveState", "");
+		if(CurrentString != null && CurrentString != "")
+			continueGame = true;
+		
 		
 		// Cause onCreateOptionsMenu to trigger
 		setHasOptionsMenu(true);
@@ -159,12 +177,12 @@ public class GameFragment extends Fragment {
 		//mPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity()); 
 		//mPrefs.edit().clear().commit();
 		
-		final View pvpNamesView = inflater.inflate(R.layout.pvp_dialog, null);
-		final View aiNameView = inflater.inflate(R.layout.ai_dialog, null);
+			final View pvpNamesView = inflater.inflate(R.layout.pvp_dialog, null);
+			final View aiNameView = inflater.inflate(R.layout.ai_dialog, null);
 		
-		pvpNamesDialog = new AlertDialog.Builder(getActivity()).create();
-		pvpNamesDialog.setView(pvpNamesView);
-		pvpNamesDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK",
+			pvpNamesDialog = new AlertDialog.Builder(getActivity()).create();
+			pvpNamesDialog.setView(pvpNamesView);
+			pvpNamesDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK",
 					new DialogInterface.OnClickListener() {
 			
 			@Override
@@ -219,7 +237,6 @@ public class GameFragment extends Fragment {
 			}
 		});
 		pvpNamesDialog.setCanceledOnTouchOutside(false);
-		pvpNamesDialog.setCancelable(false);
 		pvpNamesDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel", 
 				new DialogInterface.OnClickListener() {
 			
@@ -232,9 +249,9 @@ public class GameFragment extends Fragment {
 			}
 		});
 		
-		aiNamesDialog = new AlertDialog.Builder(getActivity()).create();
-		aiNamesDialog.setView(aiNameView);
-		aiNamesDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK", 
+			aiNamesDialog = new AlertDialog.Builder(getActivity()).create();
+			aiNamesDialog.setView(aiNameView);
+			aiNamesDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK", 
 					new DialogInterface.OnClickListener() {
 			
 			@Override
@@ -268,12 +285,11 @@ public class GameFragment extends Fragment {
 				mManager.addName(mPlayer1Name);
 				mManager.addName(mPlayer2Name);
 			
-				mAI = new AI(true, AI.Difficulty.Easy);
+				
 				
 			}
 		});
 		aiNamesDialog.setCanceledOnTouchOutside(false);
-		aiNamesDialog.setCancelable(false);
 		aiNamesDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel", 
 				new DialogInterface.OnClickListener() {
 			
@@ -285,16 +301,25 @@ public class GameFragment extends Fragment {
 				
 			}
 		});
-
-		if(mPvP) {
-			pvpNamesDialog.show();
-		} else {
-			aiNamesDialog.show();
+		
+		if(continueGame == false)
+		{
+			if(mPvP) 
+			{
+				pvpNamesDialog.show();
+			} else {
+				aiNamesDialog.show();
+			}
 		}
+		
+		continueGame = false;
+	
+		
 		
 		if (mGame == null) {
 			mGame = new PentagoGame();
 		}
+		
 		
 		mAnimHolder[0] = (FrameLayout) v.findViewById(R.id.animationHolder1);
 		mAnimHolder[1] = (FrameLayout) v.findViewById(R.id.animationHolder2);
@@ -404,7 +429,7 @@ public class GameFragment extends Fragment {
 	@Override
 	public void onStop() {
        super.onStop();
-              
+       createSaveString();      
        // Save the current score, but not the state of the current game        
        SharedPreferences.Editor ed = mPrefs.edit();
        ed.putInt("mHumanWins", mHumanWins);
@@ -1022,5 +1047,108 @@ public class GameFragment extends Fragment {
     	}
     };
 
+	@Override
+	public void onStart()
+	{
+		final Context context = getActivity();
+		String CurrentString = mPrefs.getString("saveState", "");
+		String[] separated = CurrentString.split(":");
+		
+		if(CurrentString != null && CurrentString != "")
+		{
+			continueGame = true;
+			//startNewGame();
+			mPvP = Boolean.valueOf(separated[0]);
+			mPlayer1Name = separated[1];
+			mPlayer2Name = separated[2];
+			mChronometer.setBase(mChronometer.getBase() - Long.valueOf(separated[3]).longValue());
+			mTurn = separated[4].charAt(0);
+			mPlacePiece = Boolean.valueOf(separated[5]);
+			mGoFirst = separated[6].charAt(0);
+		
+			for(int i = 0; i < 36; i++)
+			{
+				mBoard[i] = separated[7].charAt(i);
+			}
+		
+			updateImages();
+			
+			SharedPreferences.Editor prefEditor = mPrefs.edit();
+		 	prefEditor.putString("saveState", "");
+		    prefEditor.commit();
+		
+			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+			alertDialogBuilder.setTitle("Continue");
+			
+			alertDialogBuilder
+				.setMessage("There is a saved game between " + mPlayer1Name + " and " + mPlayer2Name +"! Would you like to continue?")
+				.setPositiveButton("Yes",new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog,int id) {
+					}
+				}
+				  )
+				.setNegativeButton("No",new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog,int id) {
+						clearGame();
+						
+					}
+				});
+ 
+			AlertDialog alertDialog = alertDialogBuilder.create();
+			alertDialog.setCanceledOnTouchOutside(false);
+			alertDialog.show();
+		}		
+		
+		if(mPvP == false)
+			mAI = new AI(true, AI.Difficulty.Easy);
+		
+		super.onStart();
+	}
+
+
+
+	public void clearGame()
+	{
+		a.finish();
+		startActivity(intent);
+	}
+
+    private void createSaveString()
+    {   
+    	boolean AITurn = false;
+    	
+    	if(mPlayer1Name == "Android" && mTurn == PentagoGame.PLAYER_1)
+    		AITurn = true;
+    	
+    	if(mPlayer2Name == "Android" && mTurn == PentagoGame.PLAYER_2)
+    		AITurn = true;
+    	
+    	if(mPlayer1Name == null || mPlayer2Name == null)
+    		AITurn = true;
+    	
+    	if(mGameOver == false && AITurn == false)
+    	{
+	    	long mTime = SystemClock.elapsedRealtime() - mChronometer.getBase();
+	    	String saveState = "";
+	    
+	    	saveState += mPvP + ":";
+	    	saveState += mPlayer1Name + ":";
+	    	saveState += mPlayer2Name + ":";
+	    	saveState += mTime + ":";
+	    	saveState += mTurn  + ":";
+	    	saveState += mPlacePiece + ":";
+	    	saveState += mGoFirst + ":";
+	    	
+	    	for(int i = 0; i < 36; i ++)
+	    	{
+	    		saveState += mBoard[i];
+	    	}
+	    	
+
+	    	 SharedPreferences.Editor prefEditor = mPrefs.edit();
+	    	  prefEditor.putString("saveState", saveState);
+	    	  prefEditor.commit();
+            }
+        }
 
 }
