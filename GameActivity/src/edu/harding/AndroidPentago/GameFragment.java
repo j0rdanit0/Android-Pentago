@@ -219,6 +219,7 @@ public class GameFragment extends Fragment {
 			}
 		});
 		pvpNamesDialog.setCanceledOnTouchOutside(false);
+		pvpNamesDialog.setCancelable(false);
 		pvpNamesDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel", 
 				new DialogInterface.OnClickListener() {
 			
@@ -272,6 +273,7 @@ public class GameFragment extends Fragment {
 			}
 		});
 		aiNamesDialog.setCanceledOnTouchOutside(false);
+		aiNamesDialog.setCancelable(false);
 		aiNamesDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel", 
 				new DialogInterface.OnClickListener() {
 			
